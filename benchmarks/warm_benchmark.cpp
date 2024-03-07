@@ -30,14 +30,13 @@ int main(int argc, char **argv) {
   std::ifstream in_dev{opts.device_database};
   rfaas::devices::deserialize(in_dev);
   in_dev.close();
-
+  
   // Read benchmark settings
   std::ifstream benchmark_cfg{opts.json_config};
   rfaas::benchmark::Settings settings =
       rfaas::benchmark::Settings::deserialize(benchmark_cfg);
   benchmark_cfg.close();
-
-  rfaas::client instance(
+  /*rfaas::client instance(
     settings.resource_manager_address, settings.resource_manager_port,
     *settings.device
   );
@@ -50,10 +49,11 @@ int main(int argc, char **argv) {
   if (!leased_executor.has_value()) {
     spdlog::error("Couldn't acquire a lease!");
     return 1;
-  }
+  }*/
 
-  rfaas::executor executor = std::move(leased_executor.value());
-
+  //rfaas::executor executor = std::move(leased_executor.value());
+  rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, 1, *settings.device);
+  
   if (!executor.allocate(opts.flib, opts.input_size,
                          settings.benchmark.hot_timeout, false)) {
     spdlog::error("Connection to executor and allocation failed!");
@@ -81,6 +81,7 @@ int main(int argc, char **argv) {
   spdlog::info("Warmups completed");
 
   // Start actual measurements
+  printf("benchmark repetitions %d\n", settings.benchmark.repetitions);
   for (int i = 0; i < settings.benchmark.repetitions - 1;) {
     benchmarker.start();
     SPDLOG_DEBUG("Submit execution {}", i);
@@ -106,7 +107,7 @@ int main(int argc, char **argv) {
     printf("%d ", ((char *)out.data())[i]);
   printf("\n");
 
-  instance.disconnect();
+  //instance.disconnect();
 
   return 0;
 }
