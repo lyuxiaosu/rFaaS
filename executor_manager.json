@@ -1,0 +1,17 @@
+{
+  "config": {
+    "rdma_device": "mlx5_3",
+    "node_name": "9cdc71ffff5dd571",
+    "rdma-sleep": false,
+    "rdma_device_port": 10000,
+    "resource_manager_address": "10.10.1.1",
+    "resource_manager_port": 0,
+    "resource_manager_secret": 0
+  },
+  "executor": {
+    "use_docker": false,
+    "repetitions": 100,
+    "warmup_iters": 0,
+    "pin_threads": false
+  }
+}

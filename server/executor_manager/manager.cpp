@@ -54,7 +54,7 @@ namespace rfaas::executor_manager {
     auto it = _leases.find(id);
     if(it != _leases.end()) {
       Lease lease = (*it).second;
-      _leases.erase(it);
+      //_leases.erase(it);
       return lease;
     } else {
       return std::nullopt;
@@ -103,6 +103,12 @@ namespace rfaas::executor_manager {
       data.key(1);
       rdmalib::impl::expect_true(_res_mgr_connection->connect(_settings.node_name, data.data()));
     }
+    struct Lease lease;
+    lease.id = 1;
+    lease.cores = 1;
+    lease.memory = 512;
+
+    _leases.insert_threadsafe(std::move(lease));
 
     _state.register_shared_queue(0);
     _client_responses.register_memory(_state.pd(), IBV_ACCESS_LOCAL_WRITE);
@@ -122,9 +128,9 @@ namespace rfaas::executor_manager {
     } else {
 
       std::thread rdma_poller(&Manager::poll_rdma, this);
-      std::thread res_mgr_poller(&Manager::poll_res_mgr, this);
+      //std::thread res_mgr_poller(&Manager::poll_res_mgr, this);
 
-      res_mgr_poller.join();
+      //res_mgr_poller.join();
       rdma_poller.join();
 
     }
