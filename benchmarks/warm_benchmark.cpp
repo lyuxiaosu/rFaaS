@@ -52,8 +52,11 @@ int main(int argc, char **argv) {
   }*/
 
   //rfaas::executor executor = std::move(leased_executor.value());
+  // here is the exec_manager's address and port
   rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, 1, *settings.device);
-  
+ 
+  //the last parameter is skip_exec_manager, not skip_resource_manager
+  //This function will accept executor connection and then send function code data to executor 
   if (!executor.allocate(opts.flib, opts.input_size,
                          settings.benchmark.hot_timeout, false)) {
     spdlog::error("Connection to executor and allocation failed!");

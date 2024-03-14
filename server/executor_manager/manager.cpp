@@ -536,6 +536,7 @@ namespace rfaas::executor_manager {
 
     while (!_shutdown.load()) {
 
+      // epoll_wait
       auto [events, count] = event_poller.poll(POLLING_TIMEOUT_MS);
 
       for(int i = 0; i < count; ++i) {
