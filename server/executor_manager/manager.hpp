@@ -9,6 +9,7 @@
 #include <vector>
 #include <mutex>
 #include <map>
+#include <thread>
 
 #include <rdmalib/connection.hpp>
 #include <rdmalib/rdmalib.hpp>
@@ -171,6 +172,7 @@ namespace rfaas::executor_manager {
     void _process_events_sleep();
     void _handle_client_message(ibv_wc& wc);
     void _handle_res_mgr_message(ibv_wc& wc);
+    void _bind_to_core(std::thread &thread, std::string name, int core_index);
   };
 
 }

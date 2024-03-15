@@ -1,7 +1,6 @@
 
 #include <chrono>
 #include <mutex>
-#include <thread>
 #include <variant>
 
 #include <sys/stat.h>
@@ -122,15 +121,18 @@ namespace rfaas::executor_manager {
       _settings.rdma_device_port
     );
     std::thread listener(&Manager::listen, this);
+    _bind_to_core(listener, "listener", 1);
 
     if(_settings.rdma_sleep) {
 
       std::thread rdma_processer(&Manager::_process_events_sleep, this);
+      _bind_to_core(rdma_processer, "rdma_processer", 2);
       rdma_processer.join();
 
     } else {
 
       std::thread rdma_poller(&Manager::poll_rdma, this);
+      _bind_to_core(rdma_poller, "rdma_poller", 2);
       //std::thread res_mgr_poller(&Manager::poll_res_mgr, this);
 
       //res_mgr_poller.join();
@@ -606,6 +608,17 @@ namespace rfaas::executor_manager {
 
     }
     spdlog::info("Background thread stops processing client events");
+  }
+  
+  void Manager::_bind_to_core(std::thread &thread, std::string name, int core_index) {
+    spdlog::info("Pin {} thread to core {}", name, core_index);
+        cpu_set_t cpuset;
+        CPU_ZERO(&cpuset);
+        CPU_SET(core_index, &cpuset);
+        rdmalib::impl::expect_zero(pthread_setaffinity_np(
+          thread.native_handle(),
+          sizeof(cpu_set_t), &cpuset
+        ));
   }
 
 }

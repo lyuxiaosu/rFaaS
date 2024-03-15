@@ -94,10 +94,10 @@ namespace rfaas::executor_manager {
     std::string executor_recv_buf = std::to_string(exec.recv_buffer_size);
     std::string executor_max_inline = std::to_string(exec.max_inline_data);
     std::string executor_pin_threads;
-    if(exec.pin_threads >= 0)
+    if(exec.pin_threads == false)
       executor_pin_threads = std::to_string(0);//counter++);
     else
-      executor_pin_threads = std::to_string(exec.pin_threads);
+      executor_pin_threads = std::to_string(1);
     bool use_docker = exec.use_docker;
 
     std::string mgr_port = std::to_string(conn.port);

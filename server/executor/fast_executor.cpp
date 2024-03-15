@@ -22,6 +22,7 @@
 
 #include <sched.h>
 
+#define PIN_THREADS_START_INDEX 3
 namespace server {
 
   Accounting::timepoint_t Thread::work(int invoc_id, int func_id, bool solicited, uint32_t in_size)
@@ -312,7 +313,7 @@ namespace server {
 
   void FastExecutors::allocate_threads(int timeout, int iterations)
   {
-    int pin_threads = _pin_threads;
+    int pin_threads = PIN_THREADS_START_INDEX;
     for(int i = 0; i < _numcores; ++i) {
       _threads_data[i].max_repetitions = iterations;
       _threads.emplace_back(
@@ -321,7 +322,7 @@ namespace server {
         timeout
       );
       // FIXME: make sure that native handle is actually from pthreads
-      if(pin_threads != -1) {
+      if(_pin_threads) {
         spdlog::info("Pin thread to core {}", pin_threads);
         cpu_set_t cpuset;
         CPU_ZERO(&cpuset);
