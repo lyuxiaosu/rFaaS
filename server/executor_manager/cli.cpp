@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
   }
   rfaas::executor_manager::Settings settings = rfaas::executor_manager::Settings::deserialize(in_cfg);
 
-  rfaas::executor_manager::Manager mgr{settings, opts.skip_rm};
+  rfaas::executor_manager::Manager mgr{settings, opts.skip_rm, opts.max_funcs};
   instance = &mgr;
   mgr.start();
 

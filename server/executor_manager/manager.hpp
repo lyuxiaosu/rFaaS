@@ -33,6 +33,7 @@ namespace rfaas::executor_manager {
     std::string json_config;
     std::string device_database;
     bool skip_rm;
+    int max_funcs;
     bool verbose;
   };
   Options opts(int, char**);
@@ -147,10 +148,11 @@ namespace rfaas::executor_manager {
     Settings _settings;
     //rdmalib::Buffer<Accounting> _accounting_data;
     bool _skip_rm;
+    int _max_funcs;
     std::atomic<bool> _shutdown;
     Leases _leases;
 
-    Manager(Settings &, bool skip_rm);
+    Manager(Settings &, bool skip_rm, int max_funcs);
 
     void start();
     void listen();

@@ -63,7 +63,7 @@ namespace rfaas::executor_manager {
 
   constexpr int Manager::POLLING_TIMEOUT_MS;
 
-  Manager::Manager(Settings & settings, bool skip_rm):
+  Manager::Manager(Settings & settings, bool skip_rm, int max_funcs):
     _client_queue(100),
     _ids(0),
     _res_mgr_connection(nullptr),
@@ -72,6 +72,7 @@ namespace rfaas::executor_manager {
     _client_responses(1),
     _settings(settings),
     _skip_rm(skip_rm),
+    _max_funcs(max_funcs),
     _shutdown(false)
   {
     if(!_skip_rm) {
@@ -102,14 +103,16 @@ namespace rfaas::executor_manager {
       data.secret(_settings.resource_manager_secret);
       data.key(1);
       rdmalib::impl::expect_true(_res_mgr_connection->connect(_settings.node_name, data.data()));
+    } else {
+      for (int i = 0; i < _max_funcs; i++) {
+        struct Lease lease;
+        lease.id = i + 1;
+        lease.cores = 1;
+        lease.memory = 512;
+
+        _leases.insert_threadsafe(std::move(lease));
+      }
     }
-    struct Lease lease;
-    lease.id = 1;
-    lease.cores = 1;
-    lease.memory = 512;
-
-    _leases.insert_threadsafe(std::move(lease));
-
     _state.register_shared_queue(0);
     _client_responses.register_memory(_state.pd(), IBV_ACCESS_LOCAL_WRITE);
 
