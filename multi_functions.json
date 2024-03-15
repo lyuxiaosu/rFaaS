@@ -1,0 +1,16 @@
+{
+  "config": {
+    "rdma_device": "rocep65s0f0",
+    "rdma_device_port": 10005,
+    "resource_manager_address": "10.10.1.1",
+    "resource_manager_port": 0
+  },
+  "benchmark": {
+    "pin_threads": false,
+    "repetitions": 100,
+    "warmup_repetitions": 1,
+    "memory": 512,
+    "numcores": 1,
+    "hot_timeout": -1
+  }
+}

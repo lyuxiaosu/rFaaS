@@ -1,0 +1,1 @@
+./benchmarks/multi_functions --config multi_functions.json --device-database client_devices.json --names empty,hash_func --functions ./examples/libfunctions.so,./examples/libhash_func.so --executors-database executors_database.json -s 1
