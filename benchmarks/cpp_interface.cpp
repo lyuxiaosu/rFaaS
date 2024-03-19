@@ -37,9 +37,9 @@ int main(int argc, char ** argv)
   rfaas::benchmark::Settings settings = rfaas::benchmark::Settings::deserialize(benchmark_cfg);
   benchmark_cfg.close();
 
-  settings.benchmark.numcores = 2;
+  //settings.benchmark.numcores = 2;
 
-  rfaas::client instance(
+  /*rfaas::client instance(
     settings.resource_manager_address, settings.resource_manager_port,
     *settings.device
   );
@@ -55,7 +55,10 @@ int main(int argc, char ** argv)
   }
 
   rfaas::executor executor = std::move(leased_executor.value());
+  */
 
+  rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, 1, *settings.device);
+  
   if(!executor.allocate(
     opts.flib,
     opts.input_size,
@@ -78,6 +81,7 @@ int main(int argc, char ** argv)
   std::vector<rdmalib::Buffer<char>> outs;
   outs.push_back(std::move(out));
   outs.push_back(std::move(out2));
+
   // Iniitalize input buffers
   int buf_idx = 1;
   for(rdmalib::Buffer<char> & buf : ins) {
@@ -138,7 +142,7 @@ int main(int argc, char ** argv)
 
   executor.deallocate();
 
-  instance.disconnect();
+  //instance.disconnect();
 
   return 0;
 }

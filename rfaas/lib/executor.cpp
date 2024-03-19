@@ -264,6 +264,104 @@ namespace rfaas {
     //spdlog::info("Background thread stops waiting for events");
   }
 
+  void executor::poll_queue_callback()
+  {
+    // FIXME: hide the details in rdmalib
+    spdlog::info("Background thread starts waiting for events");
+    _connections[0].conn->notify_events(true);
+    int flags = fcntl(_connections[0].conn->completion_channel()->fd, F_GETFL);
+    int rc = fcntl(_connections[0].conn->completion_channel()->fd, F_SETFL, flags | O_NONBLOCK);
+    if (rc < 0) {
+      fprintf(stderr, "Failed to change file descriptor of completion event channel\n");
+      return;
+    }
+
+    while(!_end_requested && _connections.size()) {
+      pollfd my_pollfd;
+      my_pollfd.fd      = _connections[0].conn->completion_channel()->fd;
+      my_pollfd.events  = POLLIN;
+      my_pollfd.revents = 0;
+      do {
+        rc = poll(&my_pollfd, 1, 100);
+        if(_end_requested) {
+          spdlog::info("Background thread stops waiting for events");
+          return;
+        }
+      } while (rc == 0);
+      if (rc < 0) {
+        fprintf(stderr, "poll failed\n");
+        return;
+      }
+      if(!_end_requested) {
+        auto cq = _connections[0].conn->wait_events();
+        _connections[0].conn->notify_events(true);
+        _connections[0].conn->ack_events(cq, 1);
+        auto wc = _connections[0].conn->receive_wcs().poll(false);
+        for(int i = 0; i < std::get<1>(wc); ++i) {
+          uint32_t val = ntohl(std::get<0>(wc)[i].imm_data);
+          int return_val = val & 0x0000FFFF;
+          int finished_invoc_id = val >> 16;
+          auto it = _callbacks.find(finished_invoc_id);
+          // if it == end -> we have a bug, should never appear
+          //spdlog::info("Future for id {}", finished_invoc_id);
+          //(*it).second.set_value(return_val);
+          // FIXME: handle error
+          if(!--std::get<0>(it->second)) {
+            std::get<1>(it->second)(return_val, std::get<2>(it->second)); 
+
+            _connections[0].conn->receive_wcs().update_requests(_connections.size() - 1);
+            for(int i = 1; i < _connections.size(); ++i) {
+              _connections[0].conn->receive_wcs().update_requests(-1);
+            }
+          }
+        }
+        // Poll completions from past sends
+        for(auto & conn : _connections)
+          conn.conn->poll_wc(rdmalib::QueueType::SEND, false);
+      }
+    }
+    spdlog::info("Background thread stops waiting for events");
+  }
+  void executor::poll_queue_once(int thread_id)
+  {
+    // FIXME: hide the details in rdmalib
+    _connections[0].conn->notify_events(true);
+    int flags = fcntl(_connections[0].conn->completion_channel()->fd, F_GETFL);
+    int rc = fcntl(_connections[0].conn->completion_channel()->fd, F_SETFL, flags | O_NONBLOCK);
+    if (rc < 0) {
+      fprintf(stderr, "Failed to change file descriptor of completion event channel\n");
+      return;
+    }
+
+    while(!_end_requested && _connections.size()) {
+      if(!_end_requested) {
+        auto wc = _connections[0].conn->receive_wcs().poll(false);
+        for(int i = 0; i < std::get<1>(wc); ++i) {
+          uint32_t val = ntohl(std::get<0>(wc)[i].imm_data);
+          int return_val = val & 0x0000FFFF;
+          int finished_invoc_id = val >> 16;
+          auto it = _callbacks.find(finished_invoc_id);
+          // if it == end -> we have a bug, should never appear
+          //spdlog::info("Future for id {}", finished_invoc_id);
+          //(*it).second.set_value(return_val);
+          // FIXME: handle error
+          if(!--std::get<0>(it->second)) {
+            //std::get<1>(it->second).set_value(return_val);
+	    std::get<1>(it->second)(return_val, std::get<2>(it->second));
+            _connections[0].conn->receive_wcs().update_requests(_connections.size() - 1);
+            for(int i = 1; i < _connections.size(); ++i) {
+              _connections[0].conn->receive_wcs().update_requests(-1);
+            }
+          }
+        }
+        // Poll completions from past sends
+        for(auto & conn : _connections) {
+          conn.conn->poll_wc(rdmalib::QueueType::SEND, false);
+        }
+      }
+    }
+  }
+  
   bool executor::allocate(std::string functions_path, int max_input_size,
       int hot_timeout, bool skip_manager, rdmalib::Benchmarker<5> * benchmarker)
   {

@@ -19,6 +19,8 @@
 
 namespace rfaas {
 
+  typedef void (*rfaas_result_callback_t)(int return_val, void * out);
+
   struct servers;
 
   namespace impl {
@@ -67,8 +69,8 @@ namespace rfaas {
     // manage async executions
     std::atomic<bool> _end_requested;
     std::atomic<bool> _active_polling;
-    //std::unordered_map<int, std::promise<int>> _futures;
     std::unordered_map<int, std::tuple<int, std::promise<int>>> _futures;
+    std::unordered_map<int, std::tuple<int, rfaas_result_callback_t, rdmalib::Buffer<char>*>> _callbacks;
     std::unique_ptr<std::thread> _background_thread;
     int events;
 
@@ -86,6 +88,8 @@ namespace rfaas {
     void deallocate();
     rdmalib::Buffer<char> load_library(std::string path);
     void poll_queue();
+    void poll_queue_once(int thread_id);
+    void poll_queue_callback();
 
     template<typename T, typename U>
     std::future<int> async(std::string fname, const rdmalib::Buffer<T> & in, rdmalib::Buffer<U> & out, int64_t size = -1)
@@ -135,6 +139,60 @@ namespace rfaas {
       return std::get<1>(_futures[invoc_id]).get_future();
     }
 
+    template<typename T>
+    void async_callback(std::string fname, const rdmalib::Buffer<T> & in, 
+               rdmalib::Buffer<char> & out, rfaas_result_callback_t result_callback, 
+               int64_t size = -1)
+    {
+      auto it = std::find(_func_names.begin(), _func_names.end(), fname);
+      if(it == _func_names.end()) {
+        spdlog::error("Function {} not found in the deployed library!", fname);
+        return;
+      }
+      int func_idx = std::distance(_func_names.begin(), it);
+
+      // FIXME: here get a future for async
+      char* data = static_cast<char*>(in.ptr());
+      // TODO: we assume here uintptr_t is 8 bytes
+      *reinterpret_cast<uint64_t*>(data) = out.address();
+      *reinterpret_cast<uint32_t*>(data + 8) = out.rkey();
+
+      this->_invoc_id++;
+      if (this->_invoc_id == 65536) {
+	this->_invoc_id = 0;
+      }
+      int invoc_id = this->_invoc_id;
+
+      _callbacks[invoc_id] = std::make_tuple(1, result_callback, &out);
+      uint32_t submission_id = (invoc_id << 16) | (1 << 15) | func_idx;
+      SPDLOG_DEBUG(
+        "Invoke function {} with invocation id {}, submission id {}",
+        func_idx, invoc_id, submission_id
+      );
+      if(size != -1) {
+        rdmalib::ScatterGatherElement sge;
+        sge.add(in, size, 0);
+        _connections[0].conn->post_write(
+          std::move(sge),
+          _connections[0].remote_input,
+          submission_id,
+          size <= _device.max_inline_data,
+          true
+        );
+      } else {
+        _connections[0].conn->post_write(
+          in,
+          _connections[0].remote_input,
+          submission_id,
+          in.bytes() <= _device.max_inline_data,
+          true 
+        );
+      }
+      _connections[0].conn->poll_wc(rdmalib::QueueType::SEND, false);
+      //_connections[0]._rcv_buffer.refill();
+      _connections[0].conn->receive_wcs().refill();
+    }
+    
     template<typename T,typename U>
     std::future<int> async(std::string fname, const std::vector<rdmalib::Buffer<T>> & in, std::vector<rdmalib::Buffer<U>> & out)
     {
