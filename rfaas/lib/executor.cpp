@@ -479,12 +479,12 @@ namespace rfaas {
     // before we start any submissionk.
     _connections[0].conn->notify_events(true);
     // FIXME: extend to multiple connections
-    _background_thread.reset(
+    /*_background_thread.reset(
       new std::thread{
         &executor::poll_queue,
         this
       }
-    );
+    );*/
     while(received < _numcores) {
       auto wcs = this->_connections[0].conn->poll_wc(rdmalib::QueueType::SEND, true);
       received += std::get<1>(wcs);

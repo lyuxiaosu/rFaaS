@@ -416,7 +416,39 @@ namespace rfaas {
         _connections[0].conn->receive_wcs().update_requests(-1);
       return correct;
     }
+    template<typename T, typename U>
+    void stop_execute(std::string fname, const rdmalib::Buffer<T> & in, rdmalib::Buffer<U> & out)
+    {
+      auto it = std::find(_func_names.begin(), _func_names.end(), fname);
+      if(it == _func_names.end()) {
+        spdlog::error("Function {} not found in the deployed library!", fname);
+        return;
+      }
+      int func_idx = -1; //we use func_idx = -1 to indicate the executor should stop
+
+      // FIXME: here get a future for async
+      char* data = static_cast<char*>(in.ptr());
+      // TODO: we assume here uintptr_t is 8 bytes
+      *reinterpret_cast<uint64_t*>(data) = out.address();
+      *reinterpret_cast<uint32_t*>(data + 8) = out.rkey();
+
+
+      int invoc_id = this->_invoc_id++;
+      SPDLOG_DEBUG(
+        "Invoke function {} with invocation id {}, submission id {}",
+        func_idx, invoc_id, (invoc_id << 16) | func_idx
+      );
+      _connections[0].conn->post_write(
+        in,
+        _connections[0].remote_input,
+        (invoc_id << 16) | func_idx,
+        in.bytes() <= _device.max_inline_data
+      );
+
+      _connections[0].conn->poll_wc(rdmalib::QueueType::SEND, false);
+    }
   };
+
 
 }
 
