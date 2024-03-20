@@ -64,7 +64,7 @@ namespace server {
 
     auto start = std::chrono::high_resolution_clock::now();
     int i = 0;
-    while(repetitions < max_repetitions) {
+    while(true) {
 
       // if we block, we never handle the interruption
       auto wcs = this->conn->receive_wcs().poll();
@@ -128,7 +128,7 @@ namespace server {
     // FIXME: this should be automatic
     SPDLOG_DEBUG("Thread {} Begins warm polling", id);
 
-    while(repetitions < max_repetitions) {
+    while(true) {
 
       // if we block, we never handle the interruption
       auto wcs = this->conn->receive_wcs().poll();
@@ -166,7 +166,7 @@ namespace server {
 
       // Do waiting after a single polling - avoid missing an events that
       // arrived before we called notify_events
-      if(repetitions < max_repetitions) {
+      {
         auto cq = conn->wait_events();
         conn->ack_events(cq, 1);
         conn->notify_events();
@@ -234,7 +234,7 @@ namespace server {
     spdlog::info("Thread {} begins work with timeout {}", id, timeout);
 
     // FIXME: catch interrupt handler here
-    while(repetitions < max_repetitions) {
+    while(true) {
       if(_polling_state == PollingState::HOT || _polling_state == PollingState::HOT_ALWAYS)
         hot(timeout);
       else
