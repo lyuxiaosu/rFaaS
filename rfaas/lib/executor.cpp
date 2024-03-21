@@ -362,7 +362,7 @@ namespace rfaas {
     }
   }
   
-  bool executor::allocate(std::string functions_path, int max_input_size,
+  bool executor::allocate(std::string functions_path, int max_input_size, int max_output_size,
       int hot_timeout, bool skip_manager, rdmalib::Benchmarker<5> * benchmarker)
   {
     rdmalib::Buffer<char> functions = load_library(functions_path);
@@ -388,6 +388,7 @@ namespace rfaas {
         // FIXME: variable number of inputs
         1,
         max_input_size,
+        max_output_size,
         functions.data_size(),
         _state.listen_port(),
         ""

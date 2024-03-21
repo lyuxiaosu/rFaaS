@@ -1,7 +1,10 @@
 --config multi_functions.json 
 --device-database client_devices.json 
---names empty,hash_func 
---functions ./examples/libfunctions.so,./examples/libhash_func.so 
+--names fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci
+--functions ./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so
+--req-parameters 1,1,1,1,32,32
 --executors-database executors_database.json 
---size 1
+--test-ms 10000
+--input-size 1
+--output-size 4 
 

@@ -24,7 +24,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
  
   //the last parameter is skip_exec_manager, not skip_resource_manager
   //This function will accept executor connection and then send function code data to executor 
-  if (!executor.allocate(opts.flibs[thread_id], opts.input_size,
+  if (!executor.allocate(opts.flibs[thread_id], opts.input_size, opts.output_size,
                          settings.benchmark.hot_timeout, false)) {
     spdlog::error("Connection to executor and allocation failed!");
     return;
@@ -33,13 +33,13 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
   // FIXME: move me to a memory allocator
   rdmalib::Buffer<char> in(opts.input_size,
                            rdmalib::functions::Submission::DATA_HEADER_SIZE),
-      out(opts.input_size);
+      out(opts.output_size);
   in.register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE);
   out.register_memory(executor._state.pd(),
                       IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
   memset(in.data(), 0, opts.input_size);
   for (int i = 0; i < opts.input_size; ++i) {
-    ((char *)in.data())[i] = 1;
+    ((char *)in.data())[i] = opts.req_parameters[thread_id];
   }
 
   rdmalib::Benchmarker<1> benchmarker{settings.benchmark.repetitions};
@@ -73,7 +73,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
   executor.deallocate();
 
   printf("Thread %zu Data: ", thread_id);
-  for (int i = 0; i < std::min(100, opts.input_size); ++i)
+  for (int i = 0; i < std::min(100, opts.output_size); ++i)
     printf("%d ", ((char *)out.data())[i]);
   printf("\n");
 }

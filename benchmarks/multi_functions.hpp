@@ -15,7 +15,10 @@ namespace multi_functions {
     bool verbose;
     std::vector<std::string> fnames;
     std::vector<std::string> flibs;
+    std::vector<int> req_parameters;
     int input_size;
+    int output_size;
+    int test_ms;
 
   };
 

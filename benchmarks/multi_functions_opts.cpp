@@ -20,7 +20,10 @@ namespace multi_functions {
       ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
       ("names", "Function name", cxxopts::value<std::vector<std::string>>())
       ("functions", "Functions library", cxxopts::value<std::vector<std::string>>())
-      ("s,size", "Packet size", cxxopts::value<int>()->default_value("1"))
+      ("req-parameters", "Request parameters", cxxopts::value<std::vector<int>>())
+      ("input-size", "Packet size", cxxopts::value<int>()->default_value("1"))
+      ("output-size", "response buffer size", cxxopts::value<int>()->default_value("1"))
+      ("test-ms", "Testing time lasting in ms", cxxopts::value<int>()->default_value("10000"))
       ("h,help", "Print usage", cxxopts::value<bool>()->default_value("false"))
     ;
     auto parsed_options = options.parse(argc, argv);
@@ -36,9 +39,12 @@ namespace multi_functions {
     result.verbose = parsed_options["verbose"].as<bool>();;
     result.fnames = parsed_options["names"].as<std::vector<std::string>>();
     result.flibs = parsed_options["functions"].as<std::vector<std::string>>();
-    result.input_size = parsed_options["size"].as<int>();
+    result.req_parameters = parsed_options["req-parameters"].as<std::vector<int>>();
+    result.input_size = parsed_options["input-size"].as<int>();
+    result.output_size = parsed_options["output-size"].as<int>();
     result.output_stats = parsed_options["output-stats"].as<std::string>();
     result.executors_database = parsed_options["executors-database"].as<std::string>();
+    result.test_ms = parsed_options["test-ms"].as<int>(); 
 
     return result;
   }
