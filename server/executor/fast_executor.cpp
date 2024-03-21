@@ -257,6 +257,7 @@ namespace server {
       int func_size,
       int numcores,
       int msg_size,
+      int out_size,
       int recv_buf_size,
       int max_inline_data,
       int pin_threads,
@@ -272,7 +273,7 @@ namespace server {
     _threads_data.reserve(numcores);
     for(int i = 0; i < numcores; ++i)
       _threads_data.emplace_back(
-        client_addr, port, i, func_size, msg_size,
+        client_addr, port, i, func_size, msg_size, out_size,
         recv_buf_size, max_inline_data, mgr_conn
       );
   }

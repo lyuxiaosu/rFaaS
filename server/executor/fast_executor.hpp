@@ -129,7 +129,7 @@ namespace server {
     PollingState _polling_state;
 
     Thread(std::string addr, int port, int id, int functions_size,
-        int buf_size, int recv_buffer_size, int max_inline_data,
+        int in_size, int out_size, int recv_buffer_size, int max_inline_data,
         const executor::ManagerConnection & mgr_conn):
       _functions(functions_size),
       addr(addr),
@@ -140,8 +140,8 @@ namespace server {
       max_repetitions(0),
       _recv_buffer_size(recv_buffer_size),
       sum(0),
-      send(buf_size),
-      rcv(buf_size, rdmalib::functions::Submission::DATA_HEADER_SIZE),
+      send(out_size),
+      rcv(in_size, rdmalib::functions::Submission::DATA_HEADER_SIZE),
       // +1 to handle batching of functions work completions + initial code submission
       conn(nullptr),
       _mgr_conn(mgr_conn),
@@ -172,6 +172,7 @@ namespace server {
       int function_size,
       int numcores,
       int msg_size,
+      int out_size,
       int recv_buf_size,
       int max_inline_data,
       int pin_threads,

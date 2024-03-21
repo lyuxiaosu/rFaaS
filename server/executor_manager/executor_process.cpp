@@ -85,6 +85,7 @@ namespace rfaas::executor_manager {
     std::string client_port = std::to_string(request.listen_port);
     //spdlog::error("Child fork begins work on PID {} req {}", mypid, fmt::ptr(&request));
     std::string client_in_size = std::to_string(request.input_buf_size);
+    std::string client_out_size = std::to_string(request.output_buf_size);
     std::string client_func_size = std::to_string(request.func_buf_size);
     std::string client_cores = std::to_string(lease.cores);
     std::string client_timeout = std::to_string(request.hot_timeout);
@@ -126,6 +127,7 @@ namespace rfaas::executor_manager {
           "-r", executor_repetitions.c_str(),
           "-x", executor_recv_buf.c_str(),
           "-s", client_in_size.c_str(),
+          "--output-size", client_out_size.c_str(),
           "--pin-threads", executor_pin_threads.c_str(),
           "--fast", client_cores.c_str(),
           "--warmup-iters", executor_warmups.c_str(),
@@ -193,6 +195,7 @@ namespace rfaas::executor_manager {
           "-r", executor_repetitions.c_str(),
           "-x", executor_recv_buf.c_str(),
           "-s", client_in_size.c_str(),
+          "output-size", client_out_size.c_str(),
           "--pin-threads", executor_pin_threads.c_str(),
           "--fast", client_cores.c_str(),
           "--warmup-iters", executor_warmups.c_str(),

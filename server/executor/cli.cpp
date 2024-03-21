@@ -52,12 +52,12 @@ int main(int argc, char ** argv)
     opts.func_size,
     opts.fast_executors,
     opts.msg_size,
+    opts.out_size, 
     opts.recv_buffer_size,
     opts.max_inline_data,
     opts.pin_threads,
     mgr
   );
-
   executor.allocate_threads(opts.timeout, opts.repetitions + opts.warmup_iters);
 
   executor.close();

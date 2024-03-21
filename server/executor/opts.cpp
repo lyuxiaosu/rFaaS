@@ -22,6 +22,7 @@ namespace server {
       ("func-size", "Size of functions library", cxxopts::value<int>())
       ("timeout", "Timeout for switching hot to warm polling; -1 always hot, 0 always warm", cxxopts::value<int>())
       ("s,size", "Packet size", cxxopts::value<int>()->default_value("1"))
+      ("output-size", "output size", cxxopts::value<int>()->default_value("1"))
       ("r,repetitions", "Repetitions to execute", cxxopts::value<int>()->default_value("1"))
       ("f,file", "Output server status.", cxxopts::value<std::string>())
       ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
@@ -40,6 +41,7 @@ namespace server {
     result.fast_executors = parsed_options["fast"].as<int>();
     result.recv_buffer_size = parsed_options["requests"].as<int>();
     result.msg_size = parsed_options["size"].as<int>();
+    result.out_size = parsed_options["output-size"].as<int>();
     result.repetitions = parsed_options["repetitions"].as<int>();
     result.warmup_iters = parsed_options["warmup-iters"].as<int>();
     result.verbose = parsed_options["verbose"].as<bool>();

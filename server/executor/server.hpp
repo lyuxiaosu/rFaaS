@@ -42,6 +42,7 @@ namespace server {
     int cheap_executors, fast_executors;
     int recv_buffer_size;
     int msg_size;
+    int out_size;
     int repetitions;
     int warmup_iters;
     int pin_threads;
