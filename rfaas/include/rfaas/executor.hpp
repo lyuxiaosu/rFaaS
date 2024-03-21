@@ -203,7 +203,12 @@ namespace rfaas {
       }
       int func_idx = std::distance(_func_names.begin(), it);
 
-      int invoc_id = this->_invoc_id++;
+      this->_invoc_id++;
+      if (this->_invoc_id == 65536) { // rfaas only reserved 16 bits for the invocation id, so we need to reset it to 0
+        this->_invoc_id = 0;
+      }
+      int invoc_id = this->_invoc_id;
+
       //_futures[invoc_id] = std::move(std::promise<int>{});
       int numcores = _connections.size();
       _futures[invoc_id] = std::make_tuple(numcores, std::promise<int>{});
@@ -273,7 +278,12 @@ namespace rfaas {
       *reinterpret_cast<uint64_t*>(data) = out.address();
       *reinterpret_cast<uint32_t*>(data + 8) = out.rkey();
 
-      int invoc_id = this->_invoc_id++;
+      this->_invoc_id++;
+      if (this->_invoc_id == 65536) {
+        this->_invoc_id = 0;
+      }
+      int invoc_id = this->_invoc_id;
+
       SPDLOG_DEBUG(
         "Invoke function {} with invocation id {}, submission id {}",
         func_idx, invoc_id, (invoc_id << 16) | func_idx
@@ -356,6 +366,12 @@ namespace rfaas {
         return false;
       }
       int func_idx = std::distance(_func_names.begin(), it);
+     
+      this->_invoc_id++;
+      if (this->_invoc_id == 65536) {
+        this->_invoc_id = 0;
+      }
+      int invoc_id = this->_invoc_id;
 
       int numcores = _connections.size();
       for(int i = 0; i < numcores; ++i) {
@@ -369,7 +385,7 @@ namespace rfaas {
         _connections[i].conn->post_write(
           in[i],
           _connections[i].remote_input,
-          (_invoc_id++ << 16) | func_idx,
+          (invoc_id << 16) | func_idx,
           in[i].bytes() <= _device.max_inline_data
         );
       }
@@ -432,8 +448,12 @@ namespace rfaas {
       *reinterpret_cast<uint64_t*>(data) = out.address();
       *reinterpret_cast<uint32_t*>(data + 8) = out.rkey();
 
+      this->_invoc_id++;
+      if (this->_invoc_id == 65536) {
+        this->_invoc_id = 0;
+      }
+      int invoc_id = this->_invoc_id;
 
-      int invoc_id = this->_invoc_id++;
       SPDLOG_DEBUG(
         "Invoke function {} with invocation id {}, submission id {}",
         func_idx, invoc_id, (invoc_id << 16) | func_idx

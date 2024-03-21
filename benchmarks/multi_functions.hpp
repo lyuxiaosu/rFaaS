@@ -16,6 +16,7 @@ namespace multi_functions {
     std::vector<std::string> fnames;
     std::vector<std::string> flibs;
     std::vector<int> req_parameters;
+    std::vector<int> req_type_array;
     int input_size;
     int output_size;
     int test_ms;

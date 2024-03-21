@@ -21,6 +21,7 @@ namespace multi_functions {
       ("names", "Function name", cxxopts::value<std::vector<std::string>>())
       ("functions", "Functions library", cxxopts::value<std::vector<std::string>>())
       ("req-parameters", "Request parameters", cxxopts::value<std::vector<int>>())
+      ("req-type", "Request type array", cxxopts::value<std::vector<int>>())
       ("input-size", "Packet size", cxxopts::value<int>()->default_value("1"))
       ("output-size", "response buffer size", cxxopts::value<int>()->default_value("1"))
       ("test-ms", "Testing time lasting in ms", cxxopts::value<int>()->default_value("10000"))
@@ -40,6 +41,7 @@ namespace multi_functions {
     result.fnames = parsed_options["names"].as<std::vector<std::string>>();
     result.flibs = parsed_options["functions"].as<std::vector<std::string>>();
     result.req_parameters = parsed_options["req-parameters"].as<std::vector<int>>();
+    result.req_type_array = parsed_options["req-type"].as<std::vector<int>>();
     result.input_size = parsed_options["input-size"].as<int>();
     result.output_size = parsed_options["output-size"].as<int>();
     result.output_stats = parsed_options["output-stats"].as<std::string>();
