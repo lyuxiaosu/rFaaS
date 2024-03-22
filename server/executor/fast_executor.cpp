@@ -37,6 +37,8 @@ namespace server {
     auto start = std::chrono::high_resolution_clock::now();
     // Data to ignore header passed in the buffer
     uint32_t out_size = (*ptr)(rcv.data(), in_size, send.ptr());
+    auto end = std::chrono::high_resolution_clock::now();
+    
     SPDLOG_DEBUG("Thread {} finished work!", id);
 
     // Send back: the value of immediate write
@@ -49,7 +51,6 @@ namespace server {
       out_size <= max_inline_data,
       solicited
     );
-    auto end = std::chrono::high_resolution_clock::now();
     _accounting.update_execution_time(start, end);
     _accounting.send_updated_execution(_mgr_connection, _accounting_buf, _mgr_conn);
     //int cpu = sched_getcpu();

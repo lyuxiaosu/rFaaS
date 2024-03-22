@@ -32,6 +32,7 @@ namespace server {
 
     uint64_t total_hot_polling_time;
     uint64_t total_execution_time; 
+    uint64_t total_request;
     uint64_t hot_polling_time;
     uint64_t execution_time; 
 
@@ -40,6 +41,7 @@ namespace server {
       auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
       execution_time += diff;
       total_execution_time += diff;
+      total_request++;
     }
 
     inline void send_updated_execution(
