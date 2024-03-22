@@ -1,4 +1,5 @@
 
+#include <signal.h>
 #include <chrono>
 #include <atomic>
 #include <ostream>
@@ -22,6 +23,7 @@
 
 #include <sched.h>
 
+extern volatile sig_atomic_t term_process;
 #define PIN_THREADS_START_INDEX 3
 namespace server {
 
@@ -65,7 +67,7 @@ namespace server {
 
     auto start = std::chrono::high_resolution_clock::now();
     int i = 0;
-    while(true) {
+    while(!term_process) {
 
       // if we block, we never handle the interruption
       auto wcs = this->conn->receive_wcs().poll();
@@ -129,7 +131,7 @@ namespace server {
     // FIXME: this should be automatic
     SPDLOG_DEBUG("Thread {} Begins warm polling", id);
 
-    while(true) {
+    while(!term_process) {
 
       // if we block, we never handle the interruption
       auto wcs = this->conn->receive_wcs().poll();
@@ -167,7 +169,7 @@ namespace server {
 
       // Do waiting after a single polling - avoid missing an events that
       // arrived before we called notify_events
-      {
+      if (!term_process) {
         auto cq = conn->wait_events();
         conn->ack_events(cq, 1);
         conn->notify_events();
@@ -235,7 +237,7 @@ namespace server {
     spdlog::info("Thread {} begins work with timeout {}", id, timeout);
 
     // FIXME: catch interrupt handler here
-    while(true) {
+    while(!term_process) {
       if(_polling_state == PollingState::HOT || _polling_state == PollingState::HOT_ALWAYS)
         hot(timeout);
       else
@@ -305,10 +307,10 @@ namespace server {
     SPDLOG_DEBUG("Finished wait on {} threads", _threads.size());
 
     for(auto & thread : _threads_data)
-      spdlog::info("Thread {} Repetitions {} Avg time {} ms",
+      spdlog::info("Thread {} Repetitions {} Avg time {} us",
         thread.id,
         thread.repetitions,
-        static_cast<double>(thread._accounting.total_execution_time) / thread.repetitions / 1000.0
+        static_cast<double>(thread._accounting.total_execution_time) / thread._accounting.total_request / 1000.0
       );
     _closing = true;
   }

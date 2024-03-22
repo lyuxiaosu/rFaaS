@@ -15,9 +15,13 @@
 #include "server.hpp"
 #include "fast_executor.hpp"
 
+volatile sig_atomic_t term_process = 0;
+void term_handler(int) { term_process = 1; }
+
 int main(int argc, char ** argv)
 {
-  //server::SignalHandler sighandler;
+  signal(SIGTERM, term_handler);
+  
   auto opts = server::opts(argc, argv);
   if(opts.verbose)
     spdlog::set_level(spdlog::level::debug);
