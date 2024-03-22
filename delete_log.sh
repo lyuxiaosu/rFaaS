@@ -1,1 +1,1 @@
-rm -rf executor_2*
+rm -rf executor_[1-9]*
