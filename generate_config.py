@@ -36,6 +36,6 @@ if len(sys.argv) != 2:
 loop_count = sys.argv[1]
 
 config_content = generate_config(loop_count)
-with open("config_file.txt", "w") as f:
+with open("client_config", "w") as f:
     f.write(config_content)
 
