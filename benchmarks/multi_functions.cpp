@@ -167,7 +167,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
 
   auto [median, avg] = benchmarker.summary();
   spdlog::info("thread {} Executed {} repetitions, avg {} usec/iter, median {}",
-               thread_id, settings.benchmark.repetitions, avg, median);
+               thread_id, total_request, avg, median);
   
   if (opts.output_stats != "") {
     for (size_t i = 0; i < total_request; i++) {
@@ -242,25 +242,10 @@ int main(int argc, char **argv) {
 
   for (size_t i = 0; i < num_threads; i++) threads[i].join();
   
-  /*rfaas::client instance(
-    settings.resource_manager_address, settings.resource_manager_port,
-    *settings.device
-  );
-  if (!instance.connect()) {
-    spdlog::error("Connection to resource manager failed!");
-    return 1;
-  }
+  for (int i = 1; i < seperate_rps.size(); i++) {
+    printf("type %d rps is %d\n", i, seperate_rps[i]);
+  }  
 
-  auto leased_executor = instance.lease(settings.benchmark.numcores, settings.benchmark.memory, *settings.device);
-  if (!leased_executor.has_value()) {
-    spdlog::error("Couldn't acquire a lease!");
-    return 1;
-  }*/
-
-  //rfaas::executor executor = std::move(leased_executor.value());
-  // here is the exec_manager's address and port
-
-  //instance.disconnect();
   printf("client exit\n");
   return 0;
 }
