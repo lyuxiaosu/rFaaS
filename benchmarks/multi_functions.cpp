@@ -242,9 +242,9 @@ int main(int argc, char **argv) {
 
   for (size_t i = 0; i < num_threads; i++) threads[i].join();
   
-  for (int i = 1; i < seperate_rps.size(); i++) {
-    printf("type %d rps is %d\n", i, seperate_rps[i]);
-  }  
+  for (auto it = seperate_rps.begin(); it != seperate_rps.end(); ++it) {
+    printf("type %d rps is %d\n", it->first, it->second);
+  }
 
   printf("client exit\n");
   return 0;
