@@ -244,6 +244,7 @@ int main(int argc, char **argv) {
   
   for (auto it = seperate_rps.begin(); it != seperate_rps.end(); ++it) {
     printf("type %d rps is %d\n", it->first, it->second);
+    fprintf(perf_log, "type %d rps is %d\n", it->first, it->second);
   }
 
   printf("client exit\n");
