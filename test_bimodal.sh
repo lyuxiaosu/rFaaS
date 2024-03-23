@@ -12,8 +12,7 @@ function usage {
 chmod 400 ./id_rsa
 remote_ip="128.110.218.250"
 
-#concurrency=(2 6 10 16 20)
-concurrency=(2)
+concurrency=(2 6 10 16 20)
 
 path="/my_mount/rFaaS"
 for(( i=0;i<${#concurrency[@]};i++ )) do
