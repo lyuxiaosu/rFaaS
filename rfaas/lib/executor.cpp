@@ -333,7 +333,7 @@ namespace rfaas {
       return;
     }
 
-    while(!_end_requested && _connections.size()) {
+    if(!_end_requested && _connections.size()) {
       if(!_end_requested) {
         auto wc = _connections[0].conn->receive_wcs().poll(false);
         for(int i = 0; i < std::get<1>(wc); ++i) {
