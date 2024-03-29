@@ -1,0 +1,13 @@
+--config multi_functions.json
+--device-database client_devices.json
+--names fibonacci
+--functions ./examples/libfibonacci.so
+--req-parameters 1
+--rps 1000
+--req-type 1
+--executors-database executors_database.json
+--test-ms 10000
+--input-size 1
+--output-size 4
+--output-stats client.log
+
