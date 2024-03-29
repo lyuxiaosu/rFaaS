@@ -1,0 +1,247 @@
+#include <signal.h>
+#include <random>
+#include <assert.h>
+#include <chrono>
+#include <fstream>
+#include <thread>
+
+#include <cxxopts.hpp>
+#include <spdlog/spdlog.h>
+
+#include <rdmalib/benchmarker.hpp>
+#include <rdmalib/functions.hpp>
+#include <rdmalib/rdmalib.hpp>
+
+#include <rfaas/executor.hpp>
+#include <rfaas/resources.hpp>
+#include <rfaas/rfaas.hpp>
+
+#include "settings.hpp"
+#include "multi_functions.hpp"
+
+#define unlikely(x) __builtin_expect(!!(x), 0)
+volatile sig_atomic_t ctrl_c_pressed = 0;
+void ctrl_c_handler(int) { ctrl_c_pressed = 1; }
+
+int input_size = 0;
+thread_local int response_count = 0;
+/// Simple time that uses std::chrono
+class ChronoTimer {
+ public:
+  ChronoTimer() { reset(); }
+  void reset() { start_time_ = std::chrono::high_resolution_clock::now(); }
+
+  /// Return seconds elapsed since this timer was created or last reset
+  double get_sec() const { return get_ns() / 1e9; }
+
+  /// Return milliseconds elapsed since this timer was created or last reset
+  double get_ms() const { return get_ns() / 1e6; }
+
+  /// Return microseconds elapsed since this timer was created or last reset
+  double get_us() const { return get_ns() / 1e3; }
+
+  /// Return nanoseconds elapsed since this timer was created or last reset
+  size_t get_ns() const {
+    return static_cast<size_t>(
+        std::chrono::duration_cast<std::chrono::nanoseconds>(
+            std::chrono::high_resolution_clock::now() - start_time_)
+            .count());
+  }
+
+ private:
+  std::chrono::time_point<std::chrono::high_resolution_clock> start_time_;
+};
+
+/// Return the TSC
+static inline size_t rdtsc() {
+  uint64_t rax;
+  uint64_t rdx;
+  asm volatile("rdtsc" : "=a"(rax), "=d"(rdx));
+  return static_cast<size_t>((rdx << 32) | rax);
+}
+
+static double measure_rdtsc_freq() {
+  ChronoTimer chrono_timer;
+  const uint64_t rdtsc_start = rdtsc();
+
+  // Do not change this loop! The hardcoded value below depends on this loop
+  // and prevents it from being optimized out.
+  uint64_t sum = 5;
+  for (uint64_t i = 0; i < 1000000; i++) {
+    sum += i + (sum + i) * (i % sum);
+  }
+  if (unlikely(sum != 13580802877818827968ull)) {
+    printf("Error in RDTSC freq measurement");
+    exit(-1);
+  }
+
+  const uint64_t rdtsc_cycles = rdtsc() - rdtsc_start;
+  const double freq_ghz = rdtsc_cycles * 1.0 / chrono_timer.get_ns();
+  if (unlikely(!(freq_ghz >= 0.5 && freq_ghz <= 5.0))) {
+    printf("Invalid RDTSC frequency");
+    exit(-1);
+  }
+
+  return freq_ghz;
+}
+
+static size_t ms_to_cycles(double ms, double freq_ghz) {
+  return static_cast<size_t>(ms * 1000 * 1000 * freq_ghz);
+}
+
+double ran_expo2(std::mt19937& generator, double lambda) {
+    std::exponential_distribution<double> distribution(lambda);
+    return distribution(generator);
+}
+
+void return_callback(int return_val, void * out) {
+  auto *out_buf = reinterpret_cast<rdmalib::Buffer<char>*>(out);
+  response_count++;
+  for (int i = 0; i < std::min(100, input_size); ++i)
+    printf("callback return_val %d output %d total response %d", return_val, ((char *)out_buf->data())[i], response_count);
+  printf("\n"); 
+  //delete out_buf;
+}
+
+void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_functions::Options &opts) {
+  
+  double freq_ghz = measure_rdtsc_freq();
+  printf("thread %d cpu freq %f\n", thread_id, freq_ghz);
+
+  //actively connect to executor manager and then listen on port to accept new connection request from remote fast executor
+  rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, thread_id + 1, *settings.device);
+ 
+  //the last parameter is skip_exec_manager, not skip_resource_manager
+  //This function will accept executor connection and then send function code data to executor 
+  if (!executor.allocate(opts.flibs[thread_id], opts.input_size, opts.output_size,
+                         settings.benchmark.hot_timeout, false)) {
+    spdlog::error("Connection to executor and allocation failed!");
+    return;
+  }
+
+  // FIXME: move me to a memory allocator
+  rdmalib::Buffer<char> in(opts.input_size,
+                           rdmalib::functions::Submission::DATA_HEADER_SIZE),
+      out(opts.output_size);
+  in.register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ);
+  out.register_memory(executor._state.pd(),
+                      IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ);
+  
+  memset(in.data(), 0, opts.input_size);
+  for (int i = 0; i < opts.input_size; ++i) {
+    ((char *)in.data())[i] = 1;
+  }
+
+  printf("output_size %d\n", opts.output_size);
+  rdmalib::Benchmarker<1> benchmarker{settings.benchmark.repetitions};
+  spdlog::info("Warmups begin");
+  for (int i = 0; i < settings.benchmark.warmup_repetitions; ++i) {
+    SPDLOG_DEBUG("Submit warm {}", i);
+    executor.execute(opts.fnames[thread_id], in, out);
+  }
+  spdlog::info("Warmups completed");
+
+  // Start actual measurements
+  printf("benchmark repetitions %d\n", settings.benchmark.repetitions);
+ 
+  /* set seed for this thread */
+  std::mt19937 generator(thread_id);
+  std::vector<rdmalib::Buffer<char>*> outs;
+  outs.resize(200000);
+
+  uint64_t begin, end, begin_i, end_i;
+  begin = rdtsc(); 
+  end = begin;
+  size_t total_cycles = ms_to_cycles(opts.test_ms, freq_ghz);
+  int total_requests = 0;
+  while ((end - begin) < total_cycles && ctrl_c_pressed != 1) {
+    benchmarker.start();
+    rdmalib::Buffer<char> *out_buf = new rdmalib::Buffer<char>(opts.output_size);
+    out_buf->register_memory(executor._state.pd(),
+                            IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ);
+    outs[total_requests] = out_buf;
+    
+    executor.async_callback(opts.fnames[thread_id], in, *outs[total_requests], return_callback);
+    
+    benchmarker.end(0);
+    //sleep expanantional time
+    double ms = ran_expo2(generator, opts.rps[thread_id]) * 1000;
+    size_t cycles = ms_to_cycles(ms, freq_ghz);
+    begin_i = rdtsc();
+    end_i = begin_i;
+    while((end_i - begin_i < cycles) && ctrl_c_pressed != 1) {
+      executor.poll_queue_once(thread_id);
+      end_i = rdtsc();
+    }
+    total_requests++;
+    end = rdtsc();
+  } 
+  
+  auto [median, avg] = benchmarker.summary();
+  spdlog::info("thread {} Executed {} repetitions, avg {} usec/iter, median {}",
+               thread_id, total_requests, avg, median);
+  if (opts.output_stats != "")
+    benchmarker.export_csv(opts.output_stats, {"time"});
+  executor.deallocate();
+ 
+  printf("total requests %d total responses %d\n", total_requests, response_count);
+  /*printf("Thread %zu Data: ", thread_id);
+  for (int i = 0; i < std::min(100, opts.input_size); ++i)
+    printf("%d ", ((char *)out.data())[i]);
+  printf("\n");
+  */
+}
+
+void bind_to_core(std::thread &thread, size_t core_index) {
+  cpu_set_t cpuset;
+  CPU_ZERO(&cpuset);
+
+  CPU_SET(core_index, &cpuset);
+  int rc = pthread_setaffinity_np(thread.native_handle(), sizeof(cpu_set_t),
+                                  &cpuset);
+
+  if (rc != 0) {
+    printf("Error setting thread affinity");
+    exit(-1);
+  } 
+} 
+int main(int argc, char **argv) {
+  signal(SIGINT, ctrl_c_handler);
+
+  auto opts = multi_functions::options(argc, argv);
+  input_size = opts.input_size;
+
+  if (opts.verbose)
+    spdlog::set_level(spdlog::level::debug);
+  else
+    spdlog::set_level(spdlog::level::info);
+  spdlog::set_pattern("[%H:%M:%S:%f] [T %t] [%l] %v ");
+  spdlog::info("Executing serverless-rdma test warm_benchmarker!");
+
+  // Read device details
+  std::ifstream in_dev{opts.device_database};
+  rfaas::devices::deserialize(in_dev);
+  in_dev.close();
+  
+  // Read benchmark settings
+  std::ifstream benchmark_cfg{opts.json_config};
+  rfaas::benchmark::Settings settings =
+      rfaas::benchmark::Settings::deserialize(benchmark_cfg);
+  benchmark_cfg.close();
+
+  size_t num_threads = opts.fnames.size();
+  printf("fname size %zu, flibs sizze %zu\n", num_threads, opts.flibs.size());
+  assert(num_threads == opts.flibs.size());
+
+  std::vector<std::thread> threads(num_threads);
+ 
+  for (size_t i = 0; i < num_threads; i++) {
+    threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
+    bind_to_core(threads[i], i + 1); 
+  }
+
+  for (size_t i = 0; i < num_threads; i++) threads[i].join();
+  
+  printf("client exit\n");
+  return 0;
+}
