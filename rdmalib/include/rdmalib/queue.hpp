@@ -152,7 +152,7 @@ namespace rdmalib {
     int _rcv_buf_size;
     int _refill_threshold;
     int _requests;
-    constexpr static int DEFAULT_REFILL_THRESHOLD = 8;
+    constexpr static int DEFAULT_REFILL_THRESHOLD = 256;
 
     static const int _rbatch = 32; // 32 for faster division in the code
     struct ibv_recv_wr _batch_wrs[_rbatch]; // preallocated and prefilled batched recv.
