@@ -335,6 +335,16 @@ namespace server {
           _threads[i].native_handle(),
           sizeof(cpu_set_t), &cpuset
         ));
+      } else {
+        spdlog::info("Pin thread to same core {}", pin_threads);
+        cpu_set_t cpuset;
+        CPU_ZERO(&cpuset);
+        CPU_SET(pin_threads, &cpuset);
+        rdmalib::impl::expect_zero(pthread_setaffinity_np(
+          _threads[i].native_handle(),
+          sizeof(cpu_set_t), &cpuset
+        ));
+
       }
     }
   }

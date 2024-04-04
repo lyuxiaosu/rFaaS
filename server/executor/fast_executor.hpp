@@ -42,12 +42,6 @@ namespace server {
       execution_time += diff;
       total_execution_time += diff;
       total_request++;
-      if (total_request == 1) {
-        spdlog::info("first request execution time {} us", diff / 1000.0);
-      }
-      if (total_request == 2) {
-        spdlog::info("second request execution time {} us", diff / 1000.0);
-      }
     }
 
     inline void send_updated_execution(

@@ -102,16 +102,7 @@ namespace rfaas::executor_manager {
       data.secret(_settings.resource_manager_secret);
       data.key(1);
       rdmalib::impl::expect_true(_res_mgr_connection->connect(_settings.node_name, data.data()));
-    } else {
-      for (int i = 0; i < _max_funcs; i++) {
-        struct Lease lease;
-        lease.id = i + 1;
-        lease.cores = 1;
-        lease.memory = 512;
-
-        _leases.insert_threadsafe(std::move(lease));
-      }
-    }
+    } 
     _state.register_shared_queue(0);
     _client_responses.register_memory(_state.pd(), IBV_ACCESS_LOCAL_WRITE);
 
@@ -264,19 +255,31 @@ namespace rfaas::executor_manager {
     int32_t lease_id = client.allocation_requests.data()[wr_id].lease_id;
     char * client_address = client.allocation_requests.data()[wr_id].listen_address;
     int client_port = client.allocation_requests.data()[wr_id].listen_port;
+    int cores = client.allocation_requests.data()[wr_id].cores;    
 
     if(lease_id >= 0) {
 
       spdlog::info(
         "Client {} requests lease {}, it should connect to {}:{},"
         "it should have buffer of size {}, func buffer {}, and hot timeout {}",
+        "number cores {}",
         client.id(), lease_id,
         client.allocation_requests.data()[wr_id].listen_address,
         client.allocation_requests.data()[wr_id].listen_port,
         client.allocation_requests.data()[wr_id].input_buf_size,
         client.allocation_requests.data()[wr_id].func_buf_size,
-        client.allocation_requests.data()[wr_id].hot_timeout
+        client.allocation_requests.data()[wr_id].hot_timeout,
+        client.allocation_requests.data()[wr_id].cores
       );
+
+      {
+	struct Lease lease;
+        lease.id = lease_id;
+        lease.cores = cores;
+        lease.memory = 512;
+
+        _leases.insert_threadsafe(std::move(lease));
+      }
 
       auto lease = _leases.get_threadsafe(lease_id);
 
