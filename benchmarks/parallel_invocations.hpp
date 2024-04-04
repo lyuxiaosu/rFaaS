@@ -16,6 +16,7 @@ namespace parallel_invocations {
     std::string fname;
     std::string flib;
     int input_size;
+    int output_size;
     int numcores;
 
   };

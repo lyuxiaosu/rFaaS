@@ -36,7 +36,7 @@ int main(int argc, char ** argv)
   std::streamsize size = input.tellg();
   input.seekg(0, std::ios::beg);
   rfaas::executor executor(opts.address, opts.port, opts.recv_buf_size, opts.max_inline_data);
-  executor.allocate(opts.flib, opts.numcores, size, opts.hot_timeout, false);
+  executor.allocate(opts.flib, opts.numcores, size, opts.hot_timeout, opts.numcores, false);
 
 
   // FIXME: move me to allocator

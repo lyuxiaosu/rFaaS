@@ -45,10 +45,11 @@ namespace rfaas {
     _memory(memory),
     _executions(0),
     _invoc_id(0),
-    _lease_id(lease_id)
+    _lease_id(lease_id),
+    events(0),
+    _context(NULL)
   {
     _execs_buf.register_memory(_state.pd(), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
-    events = 0;
     _active_polling = false;
     _end_requested = false;
 
@@ -322,48 +323,46 @@ namespace rfaas {
     }
     spdlog::info("Background thread stops waiting for events");
   }
-  void executor::poll_queue_once(int thread_id)
+  void executor::poll_queue_once(int cid)
   {
-    // FIXME: hide the details in rdmalib
-    _connections[0].conn->notify_events(true);
-    int flags = fcntl(_connections[0].conn->completion_channel()->fd, F_GETFL);
-    int rc = fcntl(_connections[0].conn->completion_channel()->fd, F_SETFL, flags | O_NONBLOCK);
-    if (rc < 0) {
-      fprintf(stderr, "Failed to change file descriptor of completion event channel\n");
-      return;
-    }
-
-    if(!_end_requested && _connections.size()) {
-      if(!_end_requested) {
-        auto wc = _connections[0].conn->receive_wcs().poll(false);
-        for(int i = 0; i < std::get<1>(wc); ++i) {
-          uint32_t val = ntohl(std::get<0>(wc)[i].imm_data);
-          int return_val = val & 0x0000FFFF;
-          int finished_invoc_id = val >> 16;
-          auto it = _callbacks.find(finished_invoc_id);
-          // if it == end -> we have a bug, should never appear
-          //spdlog::info("Future for id {}", finished_invoc_id);
-          //(*it).second.set_value(return_val);
-          // FIXME: handle error
-          if(!--std::get<0>(it->second)) {
-            //std::get<1>(it->second).set_value(return_val);
-	    std::get<1>(it->second)(return_val, std::get<2>(it->second));
-            _connections[0].conn->receive_wcs().update_requests(_connections.size() - 1);
-            for(int i = 1; i < _connections.size(); ++i) {
-              _connections[0].conn->receive_wcs().update_requests(-1);
-            }
-          }
-        }
-        // Poll completions from past sends
-        for(auto & conn : _connections) {
-          conn.conn->poll_wc(rdmalib::QueueType::SEND, false);
+    if(!_end_requested) {
+      auto wc = _connections[0].conn->receive_wcs().poll(false);
+      for(int i = 0; i < std::get<1>(wc); ++i) {
+        uint32_t val = ntohl(std::get<0>(wc)[i].imm_data);
+        int return_val = val & 0x0000FFFF;
+        int finished_invoc_id = val >> 16;
+        auto it = _callbacks.find(finished_invoc_id);
+        // FIXME: handle error
+        if(!--std::get<0>(it->second)) {
+	  std::get<1>(it->second)(return_val, std::get<2>(it->second));
         }
       }
+      _connections[cid].conn->poll_wc(rdmalib::QueueType::SEND, false);
+      _connections[cid].conn->receive_wcs().refill();
     }
   }
   
+  void executor::poll_queue_once2(int cid)
+  {
+    if(!_end_requested) {
+      auto wc = _connections[cid].conn->receive_wcs().poll(false);
+      for(int i = 0; i < std::get<1>(wc); ++i) {
+        uint32_t val = ntohl(std::get<0>(wc)[i].imm_data);
+        int return_val = val & 0x0000FFFF;
+        int finished_invoc_id = val >> 16;
+        auto it = _callbacks2.find(finished_invoc_id);
+        // FIXME: handle error
+        if(!--std::get<0>(it->second)) {
+	  std::get<1>(it->second)(return_val, this->_context, std::get<3>(it->second));
+        }
+      }
+      _connections[cid].conn->poll_wc(rdmalib::QueueType::SEND, false);
+      _connections[cid].conn->receive_wcs().refill();
+    }
+  }
+
   bool executor::allocate(std::string functions_path, int max_input_size, int max_output_size,
-      int hot_timeout, bool skip_manager, rdmalib::Benchmarker<5> * benchmarker)
+      int hot_timeout, int cores, bool skip_manager, rdmalib::Benchmarker<5> * benchmarker)
   {
     rdmalib::Buffer<char> functions = load_library(functions_path);
 
@@ -382,6 +381,7 @@ namespace rfaas {
 
       _exec_manager->request() = (rfaas::AllocationRequest) {
         static_cast<int32_t>(_lease_id),
+        static_cast<int16_t>(cores),
         static_cast<int16_t>(hot_timeout),
         // FIXME: timeout
         5,

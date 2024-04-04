@@ -42,7 +42,7 @@ int main(int argc, char ** argv)
     settings.benchmark.numcores = opts.numcores;
   }
 
-  rfaas::client instance(
+  /*rfaas::client instance(
     settings.resource_manager_address, settings.resource_manager_port,
     *settings.device
   );
@@ -58,11 +58,16 @@ int main(int argc, char ** argv)
   }
 
   rfaas::executor executor = std::move(leased_executor.value());
+  */
+
+  rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, 1, *settings.device);
 
   if(!executor.allocate(
     opts.flib,
     opts.input_size,
+    opts.output_size,
     settings.benchmark.hot_timeout,
+    settings.benchmark.numcores,
     false
   )) {
     spdlog::error("Connection to executor and allocation failed!");
@@ -81,7 +86,7 @@ int main(int argc, char ** argv)
     }
   }
   for(int i = 0; i < settings.benchmark.numcores; ++i) {
-    out.emplace_back(opts.input_size);
+    out.emplace_back(opts.output_size);
     out.back().register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
   }
 
@@ -93,6 +98,7 @@ int main(int argc, char ** argv)
   }
   spdlog::info("Warmups completed");
 
+  int total_requests = 0;
   // Start actual measurements
   for(int i = 0; i < settings.benchmark.repetitions;) {
     benchmarker.start();
@@ -101,6 +107,8 @@ int main(int argc, char ** argv)
       SPDLOG_DEBUG("Finished execution");
       benchmarker.end(0);
       ++i;
+      total_requests += settings.benchmark.numcores;
+      printf("total requests is %d\n", total_requests);
     } else {
       continue;
     }
@@ -122,7 +130,7 @@ int main(int argc, char ** argv)
     printf("\n");
   }
 
-  instance.disconnect();
+  //instance.disconnect();
 
   return 0;
 }

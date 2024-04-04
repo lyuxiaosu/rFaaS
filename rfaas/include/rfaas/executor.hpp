@@ -20,6 +20,8 @@
 namespace rfaas {
 
   typedef void (*rfaas_result_callback_t)(int return_val, void * out);
+  
+  typedef void (*rfaas_result_callback2_t) (int return_val, void *context, void *tag);
 
   struct servers;
 
@@ -50,7 +52,7 @@ namespace rfaas {
   };
 
   struct executor {
-    static constexpr int MAX_REMOTE_WORKERS = 64;
+    static constexpr int MAX_REMOTE_WORKERS = 256;
     rdmalib::RDMAPassive _state;
     rdmalib::Buffer<rdmalib::BufferInformation> _execs_buf;
 
@@ -71,8 +73,10 @@ namespace rfaas {
     std::atomic<bool> _active_polling;
     std::unordered_map<int, std::tuple<int, std::promise<int>>> _futures;
     std::unordered_map<int, std::tuple<int, rfaas_result_callback_t, rdmalib::Buffer<char>*>> _callbacks;
+    std::unordered_map<int, std::tuple<int, rfaas_result_callback2_t, rdmalib::Buffer<char>*, void*>> _callbacks2;
     std::unique_ptr<std::thread> _background_thread;
     int events;
+    void *_context;
 
     // Currently, we use the same device for listening and connecting to the manager.
     executor(const std::string& address, int port, int numcores, int memory, int lease_id, device_data & dev);
@@ -80,17 +84,26 @@ namespace rfaas {
 
     executor(executor&& obj);
 
+    inline void set_context(void *context) {
+      assert(_context == NULL);
+      _context = context;
+    }
+
     bool connect(const std::string & ip, int port);
 
     // Skipping managers is useful for benchmarking
     bool allocate(std::string functions_path, int max_input_size, int max_output_size, int hot_timeout,
-        bool skip_manager = false, rdmalib::Benchmarker<5> * benchmarker = nullptr);
+        int cores, bool skip_manager = false, rdmalib::Benchmarker<5> * benchmarker = nullptr);
     void deallocate();
     rdmalib::Buffer<char> load_library(std::string path);
     void poll_queue();
-    void poll_queue_once(int thread_id);
+    // cid is connection id
+    void poll_queue_once(int cid);
+    void poll_queue_once2(int cid);
     void poll_queue_callback();
 
+    // Has some bug because it only handle connections[0], couldn't be used
+    // when numcores > 1
     template<typename T, typename U>
     std::future<int> async(std::string fname, const rdmalib::Buffer<T> & in, rdmalib::Buffer<U> & out, int64_t size = -1)
     {
@@ -139,6 +152,8 @@ namespace rfaas {
       return std::get<1>(_futures[invoc_id]).get_future();
     }
 
+    // Has some bug because it only handle connections[0], couldn't be used 
+    // when numcores > 1
     template<typename T>
     void async_callback(std::string fname, const rdmalib::Buffer<T> & in, 
                rdmalib::Buffer<char> & out, rfaas_result_callback_t result_callback, 
@@ -189,10 +204,64 @@ namespace rfaas {
         );
       }
       _connections[0].conn->poll_wc(rdmalib::QueueType::SEND, false);
-      //_connections[0]._rcv_buffer.refill();
       _connections[0].conn->receive_wcs().refill();
     }
     
+    template<typename T>
+    void async_callback(std::string fname, const rdmalib::Buffer<T> & in, 
+               rdmalib::Buffer<char> & out, void *para, rfaas_result_callback2_t result_callback, 
+               int64_t size = -1)
+    {
+      auto it = std::find(_func_names.begin(), _func_names.end(), fname);
+      if(it == _func_names.end()) {
+        spdlog::error("Function {} not found in the deployed library!", fname);
+        return;
+      }
+      auto cid = reinterpret_cast<size_t>(para);
+      int func_idx = std::distance(_func_names.begin(), it);
+
+      // FIXME: here get a future for async
+      char* data = static_cast<char*>(in.ptr());
+      // TODO: we assume here uintptr_t is 8 bytes
+      *reinterpret_cast<uint64_t*>(data) = out.address();
+      *reinterpret_cast<uint32_t*>(data + 8) = out.rkey();
+
+      this->_invoc_id++;
+      if (this->_invoc_id == 65536) {
+	this->_invoc_id = 0;
+      }
+      int invoc_id = this->_invoc_id;
+
+      _callbacks2[invoc_id] = std::make_tuple(1, result_callback, &out, para);
+      uint32_t submission_id = (invoc_id << 16) | (1 << 15) | func_idx;
+      SPDLOG_DEBUG(
+        "Invoke function {} with invocation id {}, submission id {}",
+        func_idx, invoc_id, submission_id
+      );
+      if(size != -1) {
+        rdmalib::ScatterGatherElement sge;
+        sge.add(in, size, 0);
+        _connections[cid].conn->post_write(
+          std::move(sge),
+          _connections[cid].remote_input,
+          submission_id,
+          size <= _device.max_inline_data,
+          true
+        );
+      } else {
+        _connections[cid].conn->post_write(
+          in,
+          _connections[cid].remote_input,
+          submission_id,
+          in.bytes() <= _device.max_inline_data,
+          true 
+        );
+      }
+      _connections[cid].conn->poll_wc(rdmalib::QueueType::SEND, false);
+      for(int i = 0; i < _connections.size(); ++i) {
+        _connections[i].conn->receive_wcs().refill();
+      }
+    }
     template<typename T,typename U>
     std::future<int> async(std::string fname, const std::vector<rdmalib::Buffer<T>> & in, std::vector<rdmalib::Buffer<U>> & out)
     {
@@ -231,7 +300,6 @@ namespace rfaas {
       }
 
       for(int i = 0; i < numcores; ++i) {
-        //_connections[i]._rcv_buffer.refill();
         _connections[i].conn->receive_wcs().refill();
       }
       return std::get<1>(_futures[invoc_id]).get_future();

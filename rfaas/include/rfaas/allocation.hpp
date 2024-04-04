@@ -31,6 +31,7 @@ namespace rfaas {
     // > 0: Lease identificator
     // < 0: client_id with negative sign, deallocation & disconnect request
     int32_t lease_id;
+    int16_t cores; //used when skipping resource manager
     //uint32_t lease_id;
     int16_t hot_timeout;
     int16_t timeout;

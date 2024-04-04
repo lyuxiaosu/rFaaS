@@ -465,7 +465,7 @@ namespace rdmalib {
         }
 
         SPDLOG_DEBUG(
-          "[RDMAPassive] Using CQ for creating a QP: send {} recv {}",
+          "[RDMAPassive] Using CQ for creating a QP: send cq {} recv cq {}",
           fmt::ptr(_cfg.attr.send_cq),fmt::ptr(_cfg.attr.recv_cq)
         );
 

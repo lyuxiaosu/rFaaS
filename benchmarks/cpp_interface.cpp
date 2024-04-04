@@ -63,6 +63,7 @@ int main(int argc, char ** argv)
     opts.flib,
     opts.input_size,
     settings.benchmark.hot_timeout,
+    settings.benchmark.numcores,
     false
   )) {
     spdlog::error("Connection to executor and allocation failed!");

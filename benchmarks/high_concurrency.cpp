@@ -17,9 +17,10 @@
 #include <rfaas/rfaas.hpp>
 
 #include "settings.hpp"
-#include "multi_functions.hpp"
+#include "high_concurrency.hpp"
 
 #define unlikely(x) __builtin_expect(!!(x), 0)
+#define kAppMaxWindowSize 256
 
 FILE *perf_log = NULL;
 volatile sig_atomic_t ctrl_c_pressed = 0;
@@ -92,43 +93,75 @@ static size_t ms_to_cycles(double ms, double freq_ghz) {
   return static_cast<size_t>(ms * 1000 * 1000 * freq_ghz);
 }
 
-void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_functions::Options &opts) {
+class ClientContext {
+ public:
+  rfaas::executor *exec;
+  std::string fname;
+  int output_size;
+  size_t num_resps = 0;
+  size_t thread_id;
+  ChronoTimer start_time[kAppMaxWindowSize];
+  //Latency latency
+  std::vector<rdmalib::Buffer<char>> ins;
+  std::vector<rdmalib::Buffer<char>> outs;
+  ~ClientContext() {}
+};
+
+void return_callback(int return_val, void *context, void *index) {
+  auto *c = static_cast<ClientContext *>(context);
+  const auto w_i = reinterpret_cast<size_t>(index);
+  c->num_resps++;
+  //for (int i = 0; i < std::min(100, c->output_size); ++i)
+  //  printf("callback return_val %d output %d total response %d\n", return_val, ((char *)c->outs[w_i].data())[i], c->num_resps);
+  //printf("callback return_val %d output %d index %d\n", return_val, ((char *)c->outs[w_i].data())[0], w_i);
+  //c->outs[w_i].data()[0] = 0;
+  c->exec->async_callback(c->fname, c->ins[w_i], c->outs[w_i], reinterpret_cast<void *>(w_i), return_callback);
+}
+
+void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, high_concurrency::Options &opts) {
 
   double freq_ghz = measure_rdtsc_freq();
   printf("thread %zu cpu freq %f\n", thread_id, freq_ghz);
 
-  rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, thread_id + 1, *settings.device);
- 
+  ClientContext c;
+  rfaas::executor executor("10.10.1.1", 10000, opts.cores[thread_id], settings.benchmark.memory, thread_id + 1, *settings.device);
+  executor.set_context(static_cast<void *> (&c));
+  
+  c.exec = &executor;
+  c.fname = opts.fnames[thread_id];
+  c.output_size = opts.output_size;
+  c.thread_id = thread_id;
+
   //the last parameter is skip_exec_manager, not skip_resource_manager
   //This function will accept executor connection and then send function code data to executor 
   if (!executor.allocate(opts.flibs[thread_id], opts.input_size, opts.output_size,
-                         settings.benchmark.hot_timeout, settings.benchmark.numcores, false)) {
+                         settings.benchmark.hot_timeout, opts.cores[thread_id], false)) {
     spdlog::error("Connection to executor and allocation failed!");
     return;
   }
 
   // FIXME: move me to a memory allocator
-  rdmalib::Buffer<char> in(opts.input_size,
-                           rdmalib::functions::Submission::DATA_HEADER_SIZE),
-      out(opts.output_size);
-  in.register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE);
-  out.register_memory(executor._state.pd(),
-                      IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
-  memset(in.data(), 0, opts.input_size);
-  for (int i = 0; i < opts.input_size; ++i) {
-    ((char *)in.data())[i] = opts.req_parameters[thread_id];
+  for(int i = 0; i < opts.cores[thread_id]; ++i) {
+    c.ins.emplace_back(opts.input_size, rdmalib::functions::Submission::DATA_HEADER_SIZE);
+    c.ins.back().register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE);
+    memset(c.ins.back().data(), 0, opts.input_size);
+    for(int i = 0; i < opts.input_size; ++i) {
+      ((char*)c.ins.back().data())[i] = opts.req_parameters[thread_id];
+    }
+
+    c.outs.emplace_back(opts.output_size);
+    c.outs.back().register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
   }
 
   rdmalib::Benchmarker<1> benchmarker{settings.benchmark.repetitions};
   spdlog::info("Warmups begin");
-  for (int i = 0; i < settings.benchmark.warmup_repetitions; ++i) {
+  for(int i = 0; i < settings.benchmark.warmup_repetitions; ++i) {
     SPDLOG_DEBUG("Submit warm {}", i);
-    executor.execute(opts.fnames[thread_id], in, out);
+    executor.execute(opts.fnames[thread_id], c.ins, c.outs);
   }
-  spdlog::info("Warmups completed, begin testing");
+  spdlog::info("Warmups completed");
 
   // Start actual measurements
-  uint32_t total_request = 0;
   size_t total_cycles = ms_to_cycles(opts.test_ms, freq_ghz);
   printf("test ms %d\n", opts.test_ms);
   struct timespec startT, endT;
@@ -137,50 +170,37 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
   begin = rdtsc();
   end = begin;
 
+  for (size_t i = 0; i < opts.cores[thread_id]; i++) {
+    executor.async_callback(opts.fnames[thread_id], c.ins[i], c.outs[i], reinterpret_cast<void *>(i), return_callback);
+  }
+
   while ((end - begin) < total_cycles && ctrl_c_pressed != 1) {
-    benchmarker.start();
-    SPDLOG_DEBUG("Submit execution {}", total_request);
-    auto ret = executor.execute(opts.fnames[thread_id], in, out);
-    if (std::get<0>(ret)) {
-      SPDLOG_DEBUG("Finished execution {} requests", total_request);
-      benchmarker.end(0);
-      total_request++;
-      end = rdtsc();
-    } else {
-      printf("Execution failed\n");
-      return;
+    for (size_t j = 0; j < opts.cores[thread_id]; j++) {
+      executor.poll_queue_once2(j);
     }
+    end = rdtsc();
   }
   clock_gettime(CLOCK_MONOTONIC, &endT);
+  printf("thread %d finished test\n", thread_id);
  
-  printf("Finished execution %u\n", total_request); 
   int64_t delta_ms = (endT.tv_sec - startT.tv_sec) * 1000 + (endT.tv_nsec - startT.tv_nsec) / 1000000;
   int64_t delta_s = delta_ms / 1000;
-  int rps = total_request / delta_s;
+  int rps = c.num_resps / delta_s;
   rps_array[thread_id] = rps;
  
+  printf("Thread %d finished execution %u rps %d\n", thread_id, c.num_resps, rps); 
   if (seperate_rps.count(opts.req_type_array[thread_id]) > 0) {
     seperate_rps[opts.req_type_array[thread_id]] += rps;
   } else {
     seperate_rps[opts.req_type_array[thread_id]] = rps;
   }
 
-  auto [median, avg] = benchmarker.summary();
-  spdlog::info("thread {} Executed {} repetitions, avg {} usec/iter, median {}",
-               thread_id, total_request, avg, median);
-  
-  if (opts.output_stats != "") {
+  /*if (opts.output_stats != "") {
     for (size_t i = 0; i < total_request; i++) {
       fprintf(perf_log, "%zu %d %f %d\n", thread_id, opts.req_type_array[thread_id], float(benchmarker._measurements[i][0] / 1000.0), 0);
     }
-  }
-
+  }*/
   executor.deallocate();
-
-  printf("Thread %zu Data: ", thread_id);
-  for (int i = 0; i < std::min(100, opts.output_size); ++i)
-    printf("%d ", ((char *)out.data())[i]);
-  printf("\n");
 }
 
 void bind_to_core(std::thread &thread, size_t core_index) {
@@ -210,7 +230,7 @@ void perf_log_init(std::string& fname)
 int main(int argc, char **argv) {
   signal(SIGINT, ctrl_c_handler);
 
-  auto opts = multi_functions::options(argc, argv);
+  auto opts = high_concurrency::options(argc, argv);
   if (opts.verbose)
     spdlog::set_level(spdlog::level::debug);
   else

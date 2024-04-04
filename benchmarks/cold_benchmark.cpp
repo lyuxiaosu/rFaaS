@@ -87,7 +87,7 @@ int main(int argc, char ** argv)
 
     if(executor.allocate(
       opts.flib, opts.input_size, 
-      settings.benchmark.hot_timeout, false, &benchmarker
+      settings.benchmark.hot_timeout, settings.benchmark.numcores, false, &benchmarker
     )) {
       executor.execute(opts.fname, in, out);
       // End of function execution
