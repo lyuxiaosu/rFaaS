@@ -496,8 +496,7 @@ namespace rfaas {
       //_connections[0]._rcv_buffer._requests += numcores - 1;
       _connections[0].conn->receive_wcs().update_requests(numcores - 1);
       for(int i = 1; i < numcores; ++i)
-        //_connections[i]._rcv_buffer._requests--;
-        _connections[0].conn->receive_wcs().update_requests(-1);
+        _connections[i].conn->receive_wcs().update_requests(-1);
       return correct;
     }
     template<typename T, typename U>

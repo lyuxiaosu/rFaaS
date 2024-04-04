@@ -20,7 +20,7 @@ namespace parallel_invocations {
       ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
       ("name", "Function name", cxxopts::value<std::string>())
       ("functions", "Functions library", cxxopts::value<std::string>())
-      ("input-size", "Packet size", cxxopts::value<int>()->default_value("1"))
+      ("s,input-size", "Packet size", cxxopts::value<int>()->default_value("1"))
       ("output-size", "response buffer size", cxxopts::value<int>()->default_value("1"))
       ("cores", "Number of cores", cxxopts::value<int>()->default_value("0"))
       ("h,help", "Print usage", cxxopts::value<bool>()->default_value("false"))

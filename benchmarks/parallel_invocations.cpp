@@ -65,7 +65,7 @@ int main(int argc, char ** argv)
   if(!executor.allocate(
     opts.flib,
     opts.input_size,
-    opts.output_size,
+    opts.input_size,
     settings.benchmark.hot_timeout,
     settings.benchmark.numcores,
     false

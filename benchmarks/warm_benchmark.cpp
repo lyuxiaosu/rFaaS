@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
  
   //the last parameter is skip_exec_manager, not skip_resource_manager
   //This function will accept executor connection and then send function code data to executor 
-  if (!executor.allocate(opts.flib, opts.input_size,
+  if (!executor.allocate(opts.flib, opts.input_size, opts.input_size,
                          settings.benchmark.hot_timeout, settings.benchmark.numcores, false)) {
     spdlog::error("Connection to executor and allocation failed!");
     return 1;
