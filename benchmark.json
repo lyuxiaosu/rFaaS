@@ -1,6 +1,6 @@
 {
   "config": {
-    "rdma_device": "mlx5_3",
+    "rdma_device": "rocep65s0f0",
     "rdma_device_port": 10005,
     "resource_manager_address": "10.10.1.1",
     "resource_manager_port": 0
