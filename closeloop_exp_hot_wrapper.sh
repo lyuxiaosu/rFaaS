@@ -1,23 +1,25 @@
 #!/bin/bash
 function usage {
-        echo "$0"
+        echo "$0 [total expected rps]"
         exit 1
 }
 
-#if [ $# != 2 ] ; then
-#        usage
-#        exit 1;
-#fi
+if [ $# != 1 ] ; then
+        usage
+        exit 1;
+fi
+
+rps=$1
 
 chmod 400 ./id_rsa
 remote_ip="128.110.219.0"
 
-concurrency=(2 6 8 10 12 14 16)
+concurrency=(1 2 6 8 10 12 14 16)
 
 path="/my_mount/rFaaS"
 for(( i=0;i<${#concurrency[@]};i++ )) do
 	echo "i is $i"
-        python3 ./generate_config.py ${concurrency[i]}
+        python3 ./generate_config.py ${concurrency[i]} 0 $(($rps / ${concurrency[i]})) 0 1 1 
 	client_log="client-${concurrency[i]}.log"
         sed -i "s/^--output-stats .*/--output-stats $client_log/g" client_config
         mv client_config client_config_exp
