@@ -163,7 +163,8 @@ namespace rfaas {
         _background_thread->join();
         _background_thread.reset();
       }
-      _exec_manager->disconnect();
+      /* No time to figure this out, so just commend this line to avoid stucking and blocking long */
+      //_exec_manager->disconnect();
       _exec_manager.reset(nullptr);
       _state._cfg.attr.send_cq = _state._cfg.attr.recv_cq = 0;
 

@@ -298,8 +298,8 @@ int main(int argc, char **argv) {
   for (size_t i = 0; i < num_threads; i++) threads[i].join();
   
   for (auto it = seperate_rps.begin(); it != seperate_rps.end(); ++it) {
-    printf("type %d rps is %d\n", it->first, it->second);
-    fprintf(perf_log, "type %d rps is %d\n", it->first, it->second);
+    printf("type %d sending rate %d\n", it->first, it->second);
+    fprintf(perf_log, "type %d sending rate %d service rate %d\n", it->first, it->second, 0);
   }
 
   printf("client exit\n");
