@@ -429,7 +429,7 @@ namespace rfaas::executor_manager {
 
       Client& client = (*it).second;
       //client.disable(i, _accounting_data.data()[i]);
-      client.disable(_res_mgr_connection.get());
+      //client.disable(_res_mgr_connection.get());
       _clients.erase(it);
 
     } else {
