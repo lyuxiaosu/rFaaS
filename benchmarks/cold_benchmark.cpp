@@ -1,4 +1,5 @@
 
+#include <unistd.h>
 #include <chrono>
 #include <thread>
 #include <string>
@@ -38,14 +39,14 @@ int main(int argc, char ** argv)
   rfaas::benchmark::Settings settings = rfaas::benchmark::Settings::deserialize(benchmark_cfg);
   benchmark_cfg.close();
 
-  rfaas::client instance(
+  /*rfaas::client instance(
     settings.resource_manager_address, settings.resource_manager_port,
     *settings.device
   );
   if (!instance.connect()) {
     spdlog::error("Connection to resource manager failed!");
     return 1;
-  }
+  }*/
 
 
 
@@ -54,20 +55,19 @@ int main(int argc, char ** argv)
   auto start = std::chrono::high_resolution_clock::now();
   for(int i = 0; i < settings.benchmark.repetitions;++i) {
 
-    // Allow the lease information to be propagated
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
-
     spdlog::info("Begin iteration {}", i);
 
-    auto leased_executor = instance.lease(settings.benchmark.numcores, settings.benchmark.memory, *settings.device);
+    /*auto leased_executor = instance.lease(settings.benchmark.numcores, settings.benchmark.memory, *settings.device);
     if (!leased_executor.has_value()) {
       spdlog::error("Couldn't acquire a lease!");
       return 1;
     }
     rfaas::executor executor = std::move(leased_executor.value());
+    */
+    rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, i+1, *settings.device);
 
     // Allow the lease information to be propagated
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    //std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
     std::vector<rdmalib::Buffer<char>> in;
     std::vector<rdmalib::Buffer<char>> out;
@@ -84,7 +84,7 @@ int main(int argc, char ** argv)
       out.back().register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
       memset(out.back().data(), 0, opts.input_size);
     }
-
+    
     if(executor.allocate(
       opts.flib, opts.input_size, opts.input_size, 
       settings.benchmark.hot_timeout, settings.benchmark.numcores, false, &benchmarker
@@ -128,7 +128,7 @@ int main(int argc, char ** argv)
   //  printf("\n");
   //}
 
-  instance.disconnect();
+  //instance.disconnect();
 
   return 0;
 }

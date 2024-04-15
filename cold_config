@@ -1,0 +1,8 @@
+--config multi_functions.json
+--device-database client_devices.json
+--name empty 
+--functions ./examples/libfunctions.so
+--executors-database executors_database.json
+--size 1
+--output-stats client.log
+
