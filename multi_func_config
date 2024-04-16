@@ -1,0 +1,12 @@
+--config multi_functions.json
+--device-database client_devices.json
+--names empty
+--functions ./examples/libfunctions.so
+--req-parameters 1
+--req-type 1
+--executors-database executors_database.json
+--test-ms 1000
+--input-size 1
+--output-size 4
+--output-stats client.log
+
