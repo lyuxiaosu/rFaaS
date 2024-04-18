@@ -353,7 +353,7 @@ namespace rfaas {
         auto it = _callbacks2.find(finished_invoc_id);
         // FIXME: handle error
         if(!--std::get<0>(it->second)) {
-	  std::get<1>(it->second)(return_val, this->_context, std::get<3>(it->second));
+	  std::get<1>(it->second)(finished_invoc_id, this->_context, std::get<3>(it->second));
         }
       }
       _connections[cid].conn->poll_wc(rdmalib::QueueType::SEND, false);

@@ -5,6 +5,7 @@ import numpy as np
 
 
 seperate_time_dist = defaultdict(list)
+seperate_delayed_time_dist = defaultdict(list)
 seperate_slow_down = defaultdict(list)
 total_time_list = []
 total_slow_down = []
@@ -22,6 +23,7 @@ def parse_file(file_path):
             r_type = line.split(" ")[1]
             latency = line.split(" ")[2]
             pure_cpu_time = line.split(" ")[3]
+            delayed_latency = pure_cpu_time
             deadline = float(pure_cpu_time) * 10
             if float(latency) > deadline:
                 deadline_miss_count = deadline_miss_count + 1
@@ -29,6 +31,7 @@ def parse_file(file_path):
             #    continue 
             seperate_time_dist[r_type].append(float(latency))
             total_time_list.append(float(latency))
+            seperate_delayed_time_dist[r_type].append(float(delayed_latency))
             #seperate_slow_down[r_type].append(round((float(latency) / int(pure_cpu_time))))
             #total_slow_down.append(round((float(latency) / int(pure_cpu_time))))
 
@@ -102,3 +105,7 @@ if  __name__ == "__main__":
     f2.write(js2)
     f2.close()
 
+    js3 = json.dumps(seperate_delayed_time_dist)
+    f3 = open("delayed_seperate_latency.txt", 'w')
+    f3.write(js3)
+    f3.close()

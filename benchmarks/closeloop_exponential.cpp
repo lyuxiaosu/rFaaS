@@ -105,20 +105,32 @@ class ClientContext {
   rfaas::executor *exec;
   std::string fname;
   int output_size;
+  int invoc_id = 0;
   size_t num_resps = 0;
   size_t thread_id;
   ChronoTimer start_time;
   std::vector<double> exp_nums;
   //Latency latency
   std::vector<double> latency_array;
+  std::vector<double> delayed_latency_array;
   std::vector<rdmalib::Buffer<char>> ins;
   std::vector<rdmalib::Buffer<char>> outs;
+  std::unordered_map<int, std::chrono::time_point<std::chrono::high_resolution_clock>> starts;
   ~ClientContext() {}
 };
 
 void return_callback(int return_val, void *context, void *index) {
   auto *c = static_cast<ClientContext *>(context);
   const double req_lat_us = c->start_time.get_us();
+  
+  assert(return_val == c->invoc_id);
+  assert(c->starts.count(c->invoc_id) > 0);
+  const double delayed_latency_ns = static_cast<size_t>(
+        std::chrono::duration_cast<std::chrono::nanoseconds>(
+            std::chrono::high_resolution_clock::now() - c->starts[c->invoc_id])
+            .count());
+  c->delayed_latency_array.push_back(delayed_latency_ns / 1e3);
+
   const auto w_i = reinterpret_cast<size_t>(index);
   c->latency_array.push_back(req_lat_us);
   c->num_resps++;
@@ -159,7 +171,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
     for(int i = 0; i < opts.input_size; ++i) {
       ((char*)c.ins.back().data())[i] = opts.req_parameters[thread_id];
     }
-
+    
     c.outs.emplace_back(opts.output_size);
     c.outs.back().register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
   }
@@ -169,6 +181,10 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   for(int i = 0; i < settings.benchmark.warmup_repetitions; ++i) {
     SPDLOG_DEBUG("Submit warm {}", i);
     executor.execute(opts.fnames[thread_id], c.ins, c.outs);
+    c.invoc_id++;
+    if (c.invoc_id == 65536) {
+      c.invoc_id = 0;
+    }
   }
   spdlog::info("Warmups completed");
 
@@ -186,12 +202,18 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   end = begin;
 
   //while ((end - begin) < total_cycles && ctrl_c_pressed != 1) {
+  c.starts[2] = std::chrono::high_resolution_clock::now();
   while (c.num_resps != max_requests && ctrl_c_pressed != 1) {
     c.start_time.reset();
     executor.async_callback(opts.fnames[thread_id], c.ins[0], c.outs[0], reinterpret_cast<void *>(0), return_callback);
+    c.invoc_id++;
+    if (c.invoc_id == 65536) {
+      c.invoc_id = 0;
+    }
+
     total_send_out++;
     double ms = ran_expo2(generator, opts.rps_array[thread_id]) * 1000;
-    //c.exp_nums.push_back(ms);
+    c.exp_nums.push_back(ms);
     size_t cycles = ms_to_cycles(ms, freq_ghz);
     uint64_t begin_i, end_i;
     begin_i = rdtsc();
@@ -201,7 +223,12 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
       executor.poll_queue_once2(0);
       end_i = rdtsc();
     }
-  
+    if (c.invoc_id + 1 == 65536) {
+      c.starts[1] = std::chrono::high_resolution_clock::now();
+    } else {
+      c.starts[c.invoc_id + 1] = std::chrono::high_resolution_clock::now(); 
+    }
+ 
     while(c.num_resps != total_send_out) {
       executor.poll_queue_once2(0);
     }
@@ -226,7 +253,8 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   }
 
   for (size_t i = 0; i < total_send_out; i++) {
-    fprintf(perf_log, "%zu %d %f %d\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], 0);
+    //fprintf(perf_log, "%zu %d %f %d\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], 0);
+    fprintf(perf_log, "%zu %d %f %f\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], c.delayed_latency_array[i], c.latency_array[i]);
   }
 
   executor.deallocate();
@@ -257,7 +285,7 @@ void perf_log_init(std::string& fname)
     printf("Client Performance Log %s\n", fname.c_str());
     perf_log = fopen(fname.c_str(), "w");
     if (perf_log == NULL) perror("perf_log_init\n");
-    fprintf(perf_log, "thread id, type id, latency, cpu time\n");
+    fprintf(perf_log, "thread id, type id, delayed_latency, true latency\n");
   }
 }
  
