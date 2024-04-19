@@ -362,7 +362,7 @@ namespace rfaas {
   }
 
   bool executor::allocate(std::string functions_path, int max_input_size, int max_output_size,
-      int hot_timeout, int cores, bool skip_manager, rdmalib::Benchmarker<5> * benchmarker)
+      int hot_timeout, int cores, int core_start_index, bool skip_manager, rdmalib::Benchmarker<5> * benchmarker)
   {
     rdmalib::Buffer<char> functions = load_library(functions_path);
 
@@ -382,6 +382,7 @@ namespace rfaas {
       _exec_manager->request() = (rfaas::AllocationRequest) {
         static_cast<int32_t>(_lease_id),
         static_cast<int16_t>(cores),
+        static_cast<int16_t> (core_start_index),
         static_cast<int16_t>(hot_timeout),
         // FIXME: timeout
         5,

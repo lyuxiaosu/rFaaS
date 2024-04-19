@@ -93,7 +93,7 @@ namespace rfaas {
 
     // Skipping managers is useful for benchmarking
     bool allocate(std::string functions_path, int max_input_size, int max_output_size, int hot_timeout,
-        int cores, bool skip_manager = false, rdmalib::Benchmarker<5> * benchmarker = nullptr);
+        int cores, int core_start_index, bool skip_manager = false, rdmalib::Benchmarker<5> * benchmarker = nullptr);
     void deallocate();
     rdmalib::Buffer<char> load_library(std::string path);
     void poll_queue();

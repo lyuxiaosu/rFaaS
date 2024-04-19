@@ -135,7 +135,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, high_co
   //the last parameter is skip_exec_manager, not skip_resource_manager
   //This function will accept executor connection and then send function code data to executor 
   if (!executor.allocate(opts.flibs[thread_id], opts.input_size, opts.output_size,
-                         settings.benchmark.hot_timeout, opts.cores[thread_id], false)) {
+                         settings.benchmark.hot_timeout, opts.cores[thread_id], 0, false)) {
     spdlog::error("Connection to executor and allocation failed!");
     return;
   }
