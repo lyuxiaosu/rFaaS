@@ -174,7 +174,7 @@ namespace rfaas {
 
       this->_invoc_id++;
       if (this->_invoc_id == 65536) {
-	this->_invoc_id = 0;
+	this->_invoc_id = 1;
       }
       int invoc_id = this->_invoc_id;
 
@@ -228,7 +228,7 @@ namespace rfaas {
 
       this->_invoc_id++;
       if (this->_invoc_id == 65536) {
-	this->_invoc_id = 0;
+	this->_invoc_id = 1;
       }
       int invoc_id = this->_invoc_id;
 
@@ -274,7 +274,7 @@ namespace rfaas {
 
       this->_invoc_id++;
       if (this->_invoc_id == 65536) { // rfaas only reserved 16 bits for the invocation id, so we need to reset it to 0
-        this->_invoc_id = 0;
+        this->_invoc_id = 1;
       }
       int invoc_id = this->_invoc_id;
 
@@ -348,7 +348,7 @@ namespace rfaas {
 
       this->_invoc_id++;
       if (this->_invoc_id == 65536) {
-        this->_invoc_id = 0;
+        this->_invoc_id = 1;
       }
       int invoc_id = this->_invoc_id;
 
@@ -437,7 +437,7 @@ namespace rfaas {
      
       this->_invoc_id++;
       if (this->_invoc_id == 65536) {
-        this->_invoc_id = 0;
+        this->_invoc_id = 1;
       }
       int invoc_id = this->_invoc_id;
 
@@ -517,7 +517,7 @@ namespace rfaas {
 
       this->_invoc_id++;
       if (this->_invoc_id == 65536) {
-        this->_invoc_id = 0;
+        this->_invoc_id = 1;
       }
       int invoc_id = this->_invoc_id;
 
