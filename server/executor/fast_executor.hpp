@@ -183,7 +183,7 @@ namespace server {
     ~FastExecutors();
 
     void close();
-    void allocate_threads(int, int);
+    void allocate_threads(int, int, int);
   };
 
 }
