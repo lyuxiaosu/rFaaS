@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
     opts.pin_threads,
     mgr
   );
-  executor.allocate_threads(opts.timeout, opts.repetitions + opts.warmup_iters);
+  executor.allocate_threads(opts.timeout, opts.repetitions + opts.warmup_iters, opts.core_start_index);
 
   executor.close();
   return 0;

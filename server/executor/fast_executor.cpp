@@ -315,9 +315,9 @@ namespace server {
     _closing = true;
   }
 
-  void FastExecutors::allocate_threads(int timeout, int iterations)
+  void FastExecutors::allocate_threads(int timeout, int iterations, int core_start_index)
   {
-    int pin_threads = PIN_THREADS_START_INDEX;
+    int pin_threads = PIN_THREADS_START_INDEX + core_start_index;
     for(int i = 0; i < _numcores; ++i) {
       _threads_data[i].max_repetitions = iterations;
       _threads.emplace_back(

@@ -31,6 +31,7 @@ namespace server {
       ("mgr-secret", "Use selected port", cxxopts::value<int>())
       ("mgr-buf-addr", "Use selected port", cxxopts::value<uint64_t>())
       ("mgr-buf-rkey", "Use selected port", cxxopts::value<uint32_t>())
+      ("core-start-idx", "Start cpu index", cxxopts::value<int>()->default_value("0"))
     ;
     auto parsed_options = options.parse(argc, argv);
 
@@ -46,6 +47,7 @@ namespace server {
     result.warmup_iters = parsed_options["warmup-iters"].as<int>();
     result.verbose = parsed_options["verbose"].as<bool>();
     result.pin_threads = parsed_options["pin-threads"].as<int>();
+    result.core_start_index = parsed_options["core-start-idx"].as<int>();
     result.max_inline_data = parsed_options["max-inline-data"].as<int>();
     result.func_size = parsed_options["func-size"].as<int>();
     result.timeout = parsed_options["timeout"].as<int>();
