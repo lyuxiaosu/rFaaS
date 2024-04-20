@@ -105,50 +105,47 @@ class ClientContext {
   rfaas::executor *exec;
   std::string fname;
   int output_size;
-  int invoc_id = 0;
   size_t num_resps = 0;
+  uint64_t max_requests = 0;
   size_t thread_id;
+  int rps;
   ChronoTimer start_time;
   std::vector<double> exp_nums;
-  std::vector<double> should_delay_array;
   //Latency latency
   std::vector<double> latency_array;
   std::vector<double> delayed_latency_array;
   std::vector<double> total_delayed_latency_array;
   std::vector<rdmalib::Buffer<char>> ins;
   std::vector<rdmalib::Buffer<char>> outs;
-  std::unordered_map<int, std::chrono::time_point<std::chrono::high_resolution_clock>> starts;
-  std::chrono::time_point<std::chrono::high_resolution_clock> start_point;
+  std::chrono::time_point<std::chrono::high_resolution_clock> next_should_send_ts;
+  std::mt19937 generator;
   ~ClientContext() {}
 };
 
 void return_callback(int return_val, void *context, void *index) {
+  auto current = std::chrono::high_resolution_clock::now();
   auto *c = static_cast<ClientContext *>(context);
   const double req_lat_us = c->start_time.get_us();
   
-  assert(return_val == c->invoc_id);
-  assert(c->starts.count(c->invoc_id) > 0);
-  
-  auto current = std::chrono::high_resolution_clock::now();
-  const double delayed_latency_ns = static_cast<size_t>(
-        std::chrono::duration_cast<std::chrono::nanoseconds>(
-            current - c->starts[c->invoc_id]).count());
-  c->delayed_latency_array.push_back(delayed_latency_ns / 1e3);
-
-  std::chrono::duration<double, std::milli> interval(c->should_delay_array[c->invoc_id]);
-  auto should_start = c->start_point + interval;
-  const double total_delayed_latency_ns = static_cast<size_t>(
-        std::chrono::duration_cast<std::chrono::nanoseconds>(current - should_start).count());
-  c->total_delayed_latency_array.push_back(total_delayed_latency_ns / 1e3);
-
   const auto w_i = reinterpret_cast<size_t>(index);
   c->latency_array.push_back(req_lat_us);
   c->num_resps++;
-  //for (int i = 0; i < std::min(100, c->output_size); ++i)
-  //  printf("callback return_val %d output %d total response %d\n", return_val, ((char *)c->outs[w_i].data())[i], c->num_resps);
-  //printf("callback return_val %d output %d index %d\n", return_val, ((char *)c->outs[w_i].data())[0], w_i);
-  //c->outs[w_i].data()[0] = 0;
-  //c->exec->async_callback(c->fname, c->ins[w_i], c->outs[w_i], reinterpret_cast<void *>(w_i), return_callback);
+
+  const double total_delayed_latency_us = static_cast<size_t>(
+        std::chrono::duration_cast<std::chrono::nanoseconds>(current - c->next_should_send_ts).count()) / 1e3;
+  c->total_delayed_latency_array.push_back(total_delayed_latency_us);
+
+  double ms = ran_expo2(c->generator, c->rps) * 1000;
+  std::chrono::duration<double, std::milli> interval(ms);
+  c->next_should_send_ts = std::chrono::time_point_cast<std::chrono::high_resolution_clock::duration>(c->next_should_send_ts + interval);
+  while (current < c->next_should_send_ts) {
+    current = std::chrono::high_resolution_clock::now();
+  }
+
+  if (c->num_resps < c->max_requests) {
+    c->start_time.reset();
+    c->exec->async_callback(c->fname, c->ins[w_i], c->outs[w_i], reinterpret_cast<void *>(w_i), return_callback);
+  }
 }
 
 void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closeloop_exponential::Options &opts) {
@@ -158,11 +155,6 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
 
 
   ClientContext c;
-  c.should_delay_array.resize(65536);
-  for (int i = 0; i < c.should_delay_array.size(); ++i) {
-    c.should_delay_array[i] = 0;
-  }
-
   rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, thread_id + 1, *settings.device);
   executor.set_context(static_cast<void *> (&c));
   
@@ -170,6 +162,10 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   c.fname = opts.fnames[thread_id];
   c.output_size = opts.output_size;
   c.thread_id = thread_id;
+  /* set seed for this thread */
+  c.generator = std::mt19937(thread_id);
+  c.max_requests = (opts.test_ms/1000) * opts.rps_array[thread_id];
+  c.rps = opts.rps_array[thread_id];
 
   //the last parameter is skip_exec_manager, not skip_resource_manager
   //This function will accept executor connection and then send function code data to executor 
@@ -197,79 +193,32 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   for(int i = 0; i < settings.benchmark.warmup_repetitions; ++i) {
     SPDLOG_DEBUG("Submit warm {}", i);
     executor.execute(opts.fnames[thread_id], c.ins, c.outs);
-    c.invoc_id++;
-    if (c.invoc_id == 65536) {
-      c.invoc_id = 1;
-    }
   }
   spdlog::info("Warmups completed");
 
+  
   // Start actual measurements
-  /* set seed for this thread */
-  std::mt19937 generator(thread_id);
-
-  uint32_t max_requests = (opts.test_ms/1000) * opts.rps_array[thread_id];
   size_t total_cycles = ms_to_cycles(opts.test_ms, freq_ghz);
-  uint32_t total_send_out = 0;
   struct timespec startT, endT;
   clock_gettime(CLOCK_MONOTONIC, &startT);
   uint64_t begin, end;
   begin = rdtsc();
   end = begin;
 
-  //while ((end - begin) < total_cycles && ctrl_c_pressed != 1) {
-  c.starts[2] = std::chrono::high_resolution_clock::now();
-  c.start_point = c.starts[2];
+  c.next_should_send_ts = std::chrono::high_resolution_clock::now();
+  c.start_time.reset();
+  executor.async_callback(opts.fnames[thread_id], c.ins[0], c.outs[0], reinterpret_cast<void *>(0), return_callback);
 
-  c.should_delay_array[2] = 0;
-  while (c.num_resps != max_requests && ctrl_c_pressed != 1) {
-    c.start_time.reset();
-    executor.async_callback(opts.fnames[thread_id], c.ins[0], c.outs[0], reinterpret_cast<void *>(0), return_callback);
-    c.invoc_id++; //first time the invoc_id is 2 and its delay has already been set to 0 
-    if (c.invoc_id == 65536) {
-      c.invoc_id = 1;
-    }
-
-    total_send_out++;
-    double ms = ran_expo2(generator, opts.rps_array[thread_id]) * 1000;
-    c.exp_nums.push_back(ms);
-    /*if (c.invoc_id + 1 == 65536) {
-      c.should_delay_array[1] = c.should_delay_array[65535] + ms;
-    } else {
-      c.should_delay_array[c.invoc_id + 1] = c.should_delay_array[c.invoc_id] + ms;
-    }*/
-
-    size_t cycles = ms_to_cycles(ms, freq_ghz);
-    uint64_t begin_i, end_i;
-    begin_i = rdtsc();
-    end_i = begin_i;
-
-    while (((end_i - begin_i) < cycles) && ctrl_c_pressed != 1) {
+  while (c.num_resps < c.max_requests && ctrl_c_pressed != 1) {
       executor.poll_queue_once2(0);
-      end_i = rdtsc();
-    }
-    if (c.invoc_id + 1 == 65536) {
-      c.starts[1] = std::chrono::high_resolution_clock::now();
-      c.should_delay_array[1] = c.should_delay_array[65535] + ms;
-    } else {
-      c.starts[c.invoc_id + 1] = std::chrono::high_resolution_clock::now(); 
-      c.should_delay_array[c.invoc_id + 1] = c.should_delay_array[c.invoc_id] + ms;
-    }
- 
-    while(c.num_resps != total_send_out) {
-      executor.poll_queue_once2(0);
-    }
-    //end = rdtsc();
   }
-
 
   clock_gettime(CLOCK_MONOTONIC, &endT);
   printf("thread %d finished test\n", thread_id);
  
   int64_t delta_ms = (endT.tv_sec - startT.tv_sec) * 1000 + (endT.tv_nsec - startT.tv_nsec) / 1000000;
   int64_t delta_s = delta_ms / 1000;
-  //int rps = c.num_resps / delta_s;
-  int rps = total_send_out / delta_s;
+  int rps = c.num_resps / delta_s;
   rps_array[thread_id] = rps;
  
   printf("Thread %d finished execution %u expected rps %d actual rps %d\n", thread_id, c.num_resps, opts.rps_array[thread_id], rps); 
@@ -279,9 +228,9 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
     seperate_rps[opts.req_type_array[thread_id]] = rps;
   }
 
-  for (size_t i = 0; i < total_send_out; i++) {
+  for (size_t i = 0; i < c.num_resps; i++) {
     //fprintf(perf_log, "%zu %d %f %d\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], 0);
-    fprintf(perf_log, "%zu %d %f %f %f\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], c.delayed_latency_array[i], c.total_delayed_latency_array[i]);
+    fprintf(perf_log, "%zu %d %f %f\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], c.total_delayed_latency_array[i]);
   }
 
   executor.deallocate();
