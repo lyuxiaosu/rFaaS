@@ -187,10 +187,8 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   uint32_t total_send_out = 0;
   struct timespec startT, endT;
   clock_gettime(CLOCK_MONOTONIC, &startT);
-  uint64_t begin, end;
-  begin = rdtsc();
-  end = begin;
 
+  std::chrono::time_point<std::chrono::high_resolution_clock> next_send_begin_ts;
   c.next_should_send_ts = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double, std::milli> interval(0);
 
@@ -218,8 +216,32 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
     double ms = ran_expo2(generator, opts.rps_array[thread_id]) * 1000;
     interval = std::chrono::duration<double, std::milli>(ms);
     c.exp_nums.push_back(ms);
-  }
+    
+    /*
+    //send the request.
+    c.start_time.reset();
+    executor.async_callback(opts.fnames[thread_id], c.ins[0], c.outs[0], reinterpret_cast<void *>(0), return_callback);
+    total_send_out++;
+    next_send_begin_ts = std::chrono::high_resolution_clock::now();
 
+    //wait for the request response.
+    while (c.num_resps < total_send_out && ctrl_c_pressed != 1) {
+      executor.poll_queue_once2(0);
+    }
+
+    //generate next request interval.
+    double ms = ran_expo2(generator, opts.rps_array[thread_id]) * 1000;
+    //c.exp_nums.push_back(ms);
+    interval = std::chrono::duration<double, std::milli>(ms);
+    c.next_should_send_ts = std::chrono::time_point_cast<std::chrono::high_resolution_clock::duration>(next_send_begin_ts + interval);
+
+    //wait for the interval to send next request.
+    auto current = std::chrono::high_resolution_clock::now();
+    while (current < c.next_should_send_ts && ctrl_c_pressed != 1) {
+        executor.poll_queue_once2(0);
+        current = std::chrono::high_resolution_clock::now();
+    }*/
+  }
 
   clock_gettime(CLOCK_MONOTONIC, &endT);
   printf("thread %d finished test\n", thread_id);
@@ -304,7 +326,7 @@ int main(int argc, char **argv) {
   
   for (size_t i = 0; i < num_threads; i++) {
     threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
-    bind_to_core(threads[i], i + 1); 
+    bind_to_core(threads[i], i); 
     printf("Pin thread %d to cpu core %d\n", i, i+1); 
   }
 
