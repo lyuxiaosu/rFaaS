@@ -9,23 +9,32 @@ if [ $# != 0 ] ; then
         exit 1;
 fi
 
-rps1=5000
-rps2=64
+#rps1=5000
+#rps2=64
+
+rps1=10000
+rps2=96
 
 chmod 400 ./id_rsa
 remote_ip="128.110.219.0"
 
-#concurrency=(2 6 8 10 12 14 16)
-concurrency=(16)
-con1=8
-con2=8
+#concurrency=(2 4 6 8 10 14 18 20 24 28 30 32)
+concurrency=(32)
+con1=16
+con2=16
 
 path="/my_mount/rFaaS"
 for(( i=0;i<${#concurrency[@]};i++ )) do
 	echo "i is $i"
+        con1=$((${concurrency[i]} / 2))
+        con2=$((${concurrency[i]} / 2))
+
         per_rps1=$(($rps1 / $con1))
         per_rps2=$(($rps2 / $con2))
+
+        rps=$(($rps1 / ${concurrency[i]}))
         python3 ./generate_config.py $con1 $con2 $per_rps1 $per_rps2 1 32 
+        #python3 ./generate_config.py ${concurrency[i]} 0 $rps 0 1 1
 	client_log="client-${concurrency[i]}.log"
         sed -i "s/^--output-stats .*/--output-stats $client_log/g" client_config
         mv client_config client_config_exp

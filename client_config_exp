@@ -1,0 +1,12 @@
+--config multi_functions.json
+--device-database client_devices.json
+--names fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci,fibonacci
+--functions ./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so,./examples/libfibonacci.so
+--rps 625,625,625,625,625,625,625,625,625,625,625,625,625,625,625,625,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6
+--req-parameters 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32
+--req-type 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+--executors-database executors_database.json
+--test-ms 10000
+--input-size 1
+--output-size 4
+--output-stats client-32.log

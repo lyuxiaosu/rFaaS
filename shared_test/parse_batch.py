@@ -7,6 +7,10 @@ seperate_99_latency = defaultdict(lambda: defaultdict(list))
 seperate_99_9_latency = defaultdict(lambda: defaultdict(list))
 seperate_99_99_latency = defaultdict(lambda: defaultdict(list))
 
+seperate_99_delayed_latency = defaultdict(lambda: defaultdict(list))
+seperate_99_9_delayed_latency = defaultdict(lambda: defaultdict(list))
+seperate_99_99_delayed_latency = defaultdict(lambda: defaultdict(list))
+
 seperate_99_slow_down = defaultdict(lambda: defaultdict(list))
 seperate_99_9_slow_down = defaultdict(lambda: defaultdict(list))
 seperate_99_99_slow_down = defaultdict(lambda: defaultdict(list))
@@ -65,6 +69,10 @@ def get_values(key, files_list, latency_dict, slow_down_dict, deadline_miss_rate
                 seperate_99_latency_rule = r'type\s+(\d+)\s+99\s+percentile\s+latency\s+is\s+([\d.]+)'
                 seperate_99_9_latency_rule = r'type\s*(\d+)\s*99.9\s*percentile\s*latency\s*is\s*([\d.]+)'
                 seperate_99_99_latency_rule = r'type\s*(\d+)\s*99.99\s*percentile\s*latency\s*is\s*([\d.]+)'
+
+                seperate_99_delayed_latency_rule = r'type\s+(\d+)\s+99\s+percentile\s+delayed latency\s+is\s+([\d.]+)'
+                seperate_99_9_delayed_latency_rule = r'type\s*(\d+)\s*99.9\s*percentile\s*delayed latency\s*is\s*([\d.]+)'
+                seperate_99_99_delayed_latency_rule = r'type\s*(\d+)\s*99.99\s*percentile\s*delayed latency\s*is\s*([\d.]+)'
 
                 seperate_99_slow_down_rule = r'type\s*(\d+)\s*99\s*percentile\s*slow down\s*is\s*([\d.]+)'
                 seperate_99_9_slow_down_rule = r'type\s*(\d+)\s*99.9\s*percentile\s*slow down\s*is\s*([\d.]+)'
@@ -140,7 +148,22 @@ def get_values(key, files_list, latency_dict, slow_down_dict, deadline_miss_rate
                     r_type, latency = match.groups()
                     print("type:", r_type, "99.99th latency:", latency)
                     seperate_99_99_latency[key][int(r_type)].append(float(latency))
+
+                for match in re.finditer(seperate_99_delayed_latency_rule, rt):
+                    r_type, latency = match.groups()
+                    print("type:", r_type, "99th delayed latency:", latency)
+                    seperate_99_delayed_latency[key][int(r_type)].append(float(latency))
                 
+                for match in re.finditer(seperate_99_9_delayed_latency_rule, rt):
+                    r_type, latency = match.groups()
+                    print("type:", r_type, "99.9th delayed latency:", latency)
+                    seperate_99_9_delayed_latency[key][int(r_type)].append(float(latency))
+
+
+                for match in re.finditer(seperate_99_99_delayed_latency_rule, rt):
+                    r_type, latency = match.groups()
+                    print("type:", r_type, "99.99th latency:", latency)
+                    seperate_99_99_delayed_latency[key][int(r_type)].append(float(latency))
 
                 for match in re.finditer(seperate_99_slow_down_rule, rt):
                     r_type, slow_down = match.groups()
@@ -299,3 +322,17 @@ if __name__ == "__main__":
     f18.write(js18)
     f18.close()
 
+    js19 = json.dumps(seperate_99_delayed_latency)
+    f19 = open("seperate_99_delayed_latency.txt", 'w')
+    f19.write(js19)
+    f19.close()
+
+    js20 = json.dumps(seperate_99_9_delayed_latency)
+    f20 = open("seperate_99_9_delayed_latency.txt", 'w')
+    f20.write(js20)
+    f20.close()
+
+    js21 = json.dumps(seperate_99_99_delayed_latency)
+    f21 = open("seperate_99_99_delayed_latency.txt", 'w')
+    f21.write(js21)
+    f21.close()

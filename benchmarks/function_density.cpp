@@ -1,5 +1,5 @@
 
-
+#include <atomic>
 #include <random>
 #include <signal.h>
 #include <assert.h>
@@ -19,10 +19,13 @@
 #include <rfaas/rfaas.hpp>
 
 #include "settings.hpp"
-#include "closeloop_exponential.hpp"
+#include "function_density.hpp"
 
 #define unlikely(x) __builtin_expect(!!(x), 0)
 #define kAppMaxWindowSize 256
+
+std::atomic<uint64_t> total_cons(0);
+uint64_t max_cons = 0;
 
 FILE *perf_log = NULL;
 volatile sig_atomic_t ctrl_c_pressed = 0;
@@ -105,6 +108,7 @@ class ClientContext {
   rfaas::executor *exec;
   std::string fname;
   int output_size;
+  size_t num_reqs = 0;
   size_t num_resps = 0;
   size_t thread_id;
   ChronoTimer start_time;
@@ -133,54 +137,68 @@ void return_callback(int return_val, void *context, void *index) {
   c->num_resps++;
 }
 
-void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closeloop_exponential::Options &opts) {
+void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, function_density::Options &opts) {
 
   double freq_ghz = measure_rdtsc_freq();
   printf("thread %zu cpu freq %f\n", thread_id, freq_ghz);
 
-
-  ClientContext c;
-
-  rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, thread_id + 1, *settings.device);
-  executor.set_context(static_cast<void *> (&c));
+  std::vector<rfaas::executor*> executors;
+  std::vector<ClientContext*> contexts;
+  for (int i = 0; i < opts.connections; i++) {
+    ClientContext *c = new ClientContext();
+    contexts.push_back(c);
+    rfaas::executor *executor = new rfaas::executor("10.10.1.1", 10000, 
+                                                    settings.benchmark.numcores, 
+                                                    settings.benchmark.memory, 
+                                                    thread_id * opts.connections + 1, 
+                                                    *settings.device);
+    executor->set_context(static_cast<void *> (c));
+    executors.push_back(executor);
   
-  c.exec = &executor;
-  c.fname = opts.fnames[thread_id];
-  c.output_size = opts.output_size;
-  c.thread_id = thread_id;
+    c->exec = executor;
+    c->fname = opts.fnames[thread_id];
+    c->output_size = opts.output_size;
+    c->thread_id = thread_id;
 
-  //the last parameter is skip_exec_manager, not skip_resource_manager
-  //This function will accept executor connection and then send function code data to executor 
-  if (!executor.allocate(opts.flibs[thread_id], opts.input_size, opts.output_size,
+    //the last parameter is skip_exec_manager, not skip_resource_manager
+    //This function will accept executor connection and then send function code data to executor 
+    if (!executor->allocate(opts.flibs[thread_id], opts.input_size, opts.output_size,
                          settings.benchmark.hot_timeout, settings.benchmark.numcores, 0, false)) {
-    spdlog::error("Connection to executor and allocation failed!");
-    return;
-  }
+      spdlog::error("Connection to executor and allocation failed!");
+      return;
+    }  
 
-  // FIXME: move me to a memory allocator
-  for(int i = 0; i < settings.benchmark.numcores; ++i) {
-    c.ins.emplace_back(opts.input_size, rdmalib::functions::Submission::DATA_HEADER_SIZE);
-    c.ins.back().register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE);
-    memset(c.ins.back().data(), 0, opts.input_size);
-    for(int i = 0; i < opts.input_size; ++i) {
-      ((char*)c.ins.back().data())[i] = opts.req_parameters[thread_id];
-    }
+    // FIXME: move me to a memory allocator
+    for(int i = 0; i < settings.benchmark.numcores; ++i) {
+      c->ins.emplace_back(opts.input_size, rdmalib::functions::Submission::DATA_HEADER_SIZE);
+      c->ins.back().register_memory(executor->_state.pd(), IBV_ACCESS_LOCAL_WRITE);
+      memset(c->ins.back().data(), 0, opts.input_size);
+      for(int i = 0; i < opts.input_size; ++i) {
+        ((char*)c->ins.back().data())[i] = opts.req_parameters[thread_id];
+      }
     
-    c.outs.emplace_back(opts.output_size);
-    c.outs.back().register_memory(executor._state.pd(), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
+      c->outs.emplace_back(opts.output_size);
+      c->outs.back().register_memory(executor->_state.pd(), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE);
+    }
+
+    rdmalib::Benchmarker<1> benchmarker{settings.benchmark.repetitions};
+    spdlog::info("Warmups begin");
+    for(int i = 0; i < settings.benchmark.warmup_repetitions; ++i) {
+      SPDLOG_DEBUG("Submit warm {}", i);
+      executor->execute(opts.fnames[thread_id], c->ins, c->outs);
+    }
+    spdlog::info("Warmups completed");
+    total_cons.fetch_add(1);
   }
 
-  rdmalib::Benchmarker<1> benchmarker{settings.benchmark.repetitions};
-  spdlog::info("Warmups begin");
-  for(int i = 0; i < settings.benchmark.warmup_repetitions; ++i) {
-    SPDLOG_DEBUG("Submit warm {}", i);
-    executor.execute(opts.fnames[thread_id], c.ins, c.outs);
-  }
-  spdlog::info("Warmups completed");
-
+  while (total_cons.load() < max_cons) {}
   // Start actual measurements
   /* set seed for this thread */
   std::mt19937 generator(thread_id);
+
+  int lower_bound = 0;
+  int upper_bound = opts.connections - 1;
+  std::uniform_int_distribution<> dist(lower_bound, upper_bound);
 
   uint32_t max_requests = (opts.test_ms/1000) * opts.rps_array[thread_id];
   size_t total_cycles = ms_to_cycles(opts.test_ms, freq_ghz);
@@ -189,12 +207,11 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   clock_gettime(CLOCK_MONOTONIC, &startT);
 
   std::chrono::time_point<std::chrono::high_resolution_clock> next_send_begin_ts;
-  c.next_should_send_ts = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double, std::milli> interval(0);
 
-  while (c.num_resps != max_requests && ctrl_c_pressed != 1) {
+  while (total_send_out < max_requests && ctrl_c_pressed != 1) {
     //wait for the interval to send next request.
-    auto current = std::chrono::high_resolution_clock::now();
+    /*auto current = std::chrono::high_resolution_clock::now();
     c.next_should_send_ts = std::chrono::time_point_cast<std::chrono::high_resolution_clock::duration>(c.next_should_send_ts + interval);
     
     while (current < c.next_should_send_ts && ctrl_c_pressed != 1) {
@@ -215,32 +232,30 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
     //generate next request interval.
     double ms = ran_expo2(generator, opts.rps_array[thread_id]) * 1000;
     interval = std::chrono::duration<double, std::milli>(ms);
-    c.exp_nums.push_back(ms);
-    
-    /*
-    //send the request.
-    c.start_time.reset();
-    executor.async_callback(opts.fnames[thread_id], c.ins[0], c.outs[0], reinterpret_cast<void *>(0), return_callback);
-    total_send_out++;
-    next_send_begin_ts = std::chrono::high_resolution_clock::now();
+    c.exp_nums.push_back(ms);*/
 
-    //wait for the request response.
-    while (c.num_resps < total_send_out && ctrl_c_pressed != 1) {
-      executor.poll_queue_once2(0);
-    }
+    int random_con_id = dist(generator);
+    assert(random_con_id >= lower_bound && random_con_id <= upper_bound);
+    //send the request.
+    contexts[random_con_id]->start_time.reset();
+    executors[random_con_id]->async_callback(opts.fnames[thread_id], contexts[random_con_id]->ins[0], contexts[random_con_id]->outs[0], reinterpret_cast<void *>(0), return_callback);
+    contexts[random_con_id]->num_reqs++;
+    total_send_out++;
 
     //generate next request interval.
     double ms = ran_expo2(generator, opts.rps_array[thread_id]) * 1000;
-    //c.exp_nums.push_back(ms);
     interval = std::chrono::duration<double, std::milli>(ms);
-    c.next_should_send_ts = std::chrono::time_point_cast<std::chrono::high_resolution_clock::duration>(next_send_begin_ts + interval);
-
-    //wait for the interval to send next request.
     auto current = std::chrono::high_resolution_clock::now();
-    while (current < c.next_should_send_ts && ctrl_c_pressed != 1) {
-        executor.poll_queue_once2(0);
-        current = std::chrono::high_resolution_clock::now();
-    }*/
+    auto wait_end = std::chrono::time_point_cast<std::chrono::high_resolution_clock::duration>(current + interval);
+    while (current < wait_end && ctrl_c_pressed != 1) {
+      executors[random_con_id]->poll_queue_once2(0);
+      current = std::chrono::high_resolution_clock::now();
+    }
+    //wait for response comming back
+    while (contexts[random_con_id]->num_resps < contexts[random_con_id]->num_reqs && ctrl_c_pressed != 1) {
+      executors[random_con_id]->poll_queue_once2(0);
+    }
+ 
   }
 
   clock_gettime(CLOCK_MONOTONIC, &endT);
@@ -252,19 +267,21 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   int rps = total_send_out / delta_s;
   rps_array[thread_id] = rps;
  
-  printf("Thread %d finished execution %u expected rps %d actual rps %d\n", thread_id, c.num_resps, opts.rps_array[thread_id], rps); 
+  //printf("Thread %d finished execution %u expected rps %d actual rps %d\n", thread_id, c.num_resps, opts.rps_array[thread_id], rps); 
   if (seperate_rps.count(opts.req_type_array[thread_id]) > 0) {
     seperate_rps[opts.req_type_array[thread_id]] += rps;
   } else {
     seperate_rps[opts.req_type_array[thread_id]] = rps;
   }
 
-  for (size_t i = 0; i < total_send_out; i++) {
-    //fprintf(perf_log, "%zu %d %f %d\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], 0);
-    fprintf(perf_log, "%zu %d %f %f\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], c.delayed_latency_array[i]);
+  for (int j = 0; j < contexts.size(); j++) {
+    for (size_t i = 0; i < contexts[j]->num_resps; i++) {
+      //fprintf(perf_log, "%zu %d %f %d\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], 0);
+      fprintf(perf_log, "%zu %d %f %f\n", thread_id, opts.req_type_array[thread_id], contexts[j]->latency_array[i], contexts[j]->delayed_latency_array[i]);
+    }
   }
-
-  executor.deallocate();
+  
+  //executor->deallocate();
   /*printf("thread %zu exp nums:\n", thread_id);
   for (size_t i = 0; i < 100; i++) {
     printf("%f\n", c.exp_nums[i]);
@@ -299,7 +316,7 @@ void perf_log_init(std::string& fname)
 int main(int argc, char **argv) {
   signal(SIGINT, ctrl_c_handler);
 
-  auto opts = closeloop_exponential::options(argc, argv);
+  auto opts = function_density::options(argc, argv);
   if (opts.verbose)
     spdlog::set_level(spdlog::level::debug);
   else
@@ -323,7 +340,8 @@ int main(int argc, char **argv) {
   assert(num_threads == opts.flibs.size());
 
   std::vector<std::thread> threads(num_threads);
-  
+  max_cons = num_threads * opts.connections;
+ 
   for (size_t i = 0; i < num_threads; i++) {
     threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
     bind_to_core(threads[i], i); 

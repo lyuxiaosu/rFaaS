@@ -95,6 +95,15 @@ if  __name__ == "__main__":
         print("type ", key, " 99.99 percentile slow down is ", p_99_99)
 
 
+    for key, value in total_seperate_delayed_time_dist.items():
+        total_seperate_delayed_time_array = np.array(value)
+        p_99 = np.percentile(total_seperate_delayed_time_array, 99)
+        p_99_9 = np.percentile(total_seperate_delayed_time_array, 99.9)
+        p_99_99 = np.percentile(total_seperate_delayed_time_array, 99.99)
+        print("type ", key, " 99 percentile delayed latency is ", p_99)
+        print("type ", key, " 99.9 percentile delayed latency is ", p_99_9)
+        print("type ", key, " 99.99 percentile delayed latency is ", p_99_99)
+    
     js1 = json.dumps(seperate_time_dist)
     f1 = open("seperate_latency.txt", 'w')
     f1.write(js1)
