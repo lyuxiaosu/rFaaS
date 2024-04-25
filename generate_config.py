@@ -2,7 +2,7 @@ import sys
 import os
 
 
-def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param):
+def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param, func_types=0):
     function = "./examples/libfibonacci.so"
     name = "fibonacci"
     type1 = "1"
@@ -13,9 +13,11 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
     config.append("--device-database client_devices.json")
     config.append("--names " + ",".join([name]*(type1_con + type2_con)))
     config.append("--functions " + ",".join([function]*(type1_con + type2_con)))
+    if func_types != 0:
+        config.append("--connections {}".format(func_types))
   
     if type1_con == 0:
-        if type2_rps != "0":
+        if type2_rps != 0:
             rps2 = [type2_rps] * type2_con 
             config.append("--rps " + ",".join(rps2))
         parameter2 = [type2_param] * type2_con
@@ -23,7 +25,7 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
         req_type2 = [type2] * type2_con
         config.append("--req-type " + ",".join(req_type2))
     elif type2_con == 0:
-        if type1_rps != "0":
+        if type1_rps != 0:
             rps1 = [type1_rps] * type1_con
             config.append("--rps " + ",".join(rps1))
         parameter1 = [type1_param] * type1_con
@@ -31,13 +33,13 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
         req_type1 = [type1] * type1_con
         config.append("--req-type " + ",".join(req_type1))
     else:
-        if type1_rps != "0" and type2_rps == "0":
+        if type1_rps != 0 and type2_rps == 0:
             rps1 = [type1_rps] * type1_con
             config.append("--rps " + ",".join(rps1))
-        if type2_rps != "0" and type1_rps == "0":
+        if type2_rps != 0 and type1_rps == 0:
             rps2 = [type2_rps] * type2_con
             config.append("--rps " + ",".join(rps2))
-        if type1_rps != "0" and type2_rps != "0":
+        if type1_rps != 0 and type2_rps != 0:
             rps1 = [type1_rps] * type1_con
             rps2 = [type2_rps] * type2_con 
             config.append("--rps " + ",".join(rps1) + "," + ",".join(rps2)) 
@@ -54,8 +56,10 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
     config.append(f"--output-stats client.log")
     return "\n".join(config)
 
-if len(sys.argv) != 7:
-    print("Usage: <type1_concurrency> <type2_concurrency> <type1_rps> <type2_rps> <type1_param> <type2_param>")
+import sys
+
+if len(sys.argv) < 7 or len(sys.argv) > 8:
+    print("Usage: <type1_concurrency> <type2_concurrency> <type1_rps> <type2_rps> <type1_param> <type2_param> [optional_func_type]")
     sys.exit(1)
 
 type1_con = int(sys.argv[1])
@@ -65,7 +69,9 @@ type2_rps = sys.argv[4]
 type1_param = sys.argv[5]
 type2_param = sys.argv[6]
 
-config_content = generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param)
+optional_cons = sys.argv[7] if len(sys.argv) == 8 else 0
+
+config_content = generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param, optional_cons)
 with open("client_config", "w") as f:
     f.write(config_content)
 
