@@ -9,11 +9,8 @@ if [ $# != 0 ] ; then
         exit 1;
 fi
 
-#rps1=5000
-#rps2=64
-
-rps1=10000
-rps2=96
+rps1=5000
+rps2=48
 
 chmod 400 ./id_rsa
 remote_ip="128.110.219.0"

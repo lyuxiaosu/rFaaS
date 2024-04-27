@@ -15,8 +15,7 @@ per_rps=$(($rps / $threads))
 chmod 400 ./id_rsa
 remote_ip="128.110.219.0"
 
-#concurrency=(100 200 400 600 800 1000)
-concurrency=(2000)
+concurrency=(100 200 400 600 800 1000 1200 1400 1600 1800 2000)
 
 path="/my_mount/rFaaS"
 for(( i=0;i<${#concurrency[@]};i++ )) do

@@ -7,10 +7,10 @@
   },
   "benchmark": {
     "pin_threads": false,
-    "repetitions": 100,
+    "repetitions": 10,
     "warmup_repetitions": 1,
     "memory": 512,
     "numcores": 1,
-    "hot_timeout": -1
+    "hot_timeout": 0 
   }
 }
