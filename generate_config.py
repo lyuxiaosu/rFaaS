@@ -17,7 +17,7 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
         config.append("--connections {}".format(func_types))
   
     if type1_con == 0:
-        if type2_rps != 0:
+        if type2_rps != "0":
             rps2 = [type2_rps] * type2_con 
             config.append("--rps " + ",".join(rps2))
         parameter2 = [type2_param] * type2_con
@@ -25,7 +25,7 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
         req_type2 = [type2] * type2_con
         config.append("--req-type " + ",".join(req_type2))
     elif type2_con == 0:
-        if type1_rps != 0:
+        if type1_rps != "0":
             rps1 = [type1_rps] * type1_con
             config.append("--rps " + ",".join(rps1))
         parameter1 = [type1_param] * type1_con
@@ -33,13 +33,13 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
         req_type1 = [type1] * type1_con
         config.append("--req-type " + ",".join(req_type1))
     else:
-        if type1_rps != 0 and type2_rps == 0:
+        if type1_rps != "0" and type2_rps == "0":
             rps1 = [type1_rps] * type1_con
             config.append("--rps " + ",".join(rps1))
-        if type2_rps != 0 and type1_rps == 0:
+        if type2_rps != "0" and type1_rps == "0":
             rps2 = [type2_rps] * type2_con
             config.append("--rps " + ",".join(rps2))
-        if type1_rps != 0 and type2_rps != 0:
+        if type1_rps != "0" and type2_rps != "0":
             rps1 = [type1_rps] * type1_con
             rps2 = [type2_rps] * type2_con 
             config.append("--rps " + ",".join(rps1) + "," + ",".join(rps2)) 
