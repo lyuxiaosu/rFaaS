@@ -13,7 +13,7 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
     config.append("--device-database client_devices.json")
     config.append("--names " + ",".join([name]*(type1_con + type2_con)))
     config.append("--functions " + ",".join([function]*(type1_con + type2_con)))
-    if func_types != 0:
+    if func_types != "0":
         config.append("--connections {}".format(func_types))
   
     if type1_con == 0:
@@ -69,7 +69,7 @@ type2_rps = sys.argv[4]
 type1_param = sys.argv[5]
 type2_param = sys.argv[6]
 
-optional_cons = sys.argv[7] if len(sys.argv) == 8 else 0
+optional_cons = sys.argv[7] if len(sys.argv) == 8 else "0"
 
 config_content = generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param, optional_cons)
 with open("client_config", "w") as f:
