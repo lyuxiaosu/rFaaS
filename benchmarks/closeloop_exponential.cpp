@@ -244,7 +244,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   }
 
   clock_gettime(CLOCK_MONOTONIC, &endT);
-  printf("thread %d finished test\n", thread_id);
+  printf("thread %zu finished test\n", thread_id);
  
   int64_t delta_ms = (endT.tv_sec - startT.tv_sec) * 1000 + (endT.tv_nsec - startT.tv_nsec) / 1000000;
   int64_t delta_s = delta_ms / 1000;
@@ -252,7 +252,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, closelo
   int rps = total_send_out / delta_s;
   rps_array[thread_id] = rps;
  
-  printf("Thread %d finished execution %u expected rps %d actual rps %d\n", thread_id, c.num_resps, opts.rps_array[thread_id], rps); 
+  printf("Thread %zu finished execution %zu expected rps %d actual rps %d\n", thread_id, c.num_resps, opts.rps_array[thread_id], rps); 
   if (seperate_rps.count(opts.req_type_array[thread_id]) > 0) {
     seperate_rps[opts.req_type_array[thread_id]] += rps;
   } else {
@@ -327,7 +327,7 @@ int main(int argc, char **argv) {
   for (size_t i = 0; i < num_threads; i++) {
     threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
     bind_to_core(threads[i], i); 
-    printf("Pin thread %d to cpu core %d\n", i, i+1); 
+    printf("Pin thread %zu to cpu core %zu\n", i, i+1); 
   }
 
   for (size_t i = 0; i < num_threads; i++) threads[i].join();

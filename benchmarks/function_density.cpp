@@ -235,6 +235,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, functio
     c.exp_nums.push_back(ms);*/
 
     int random_con_id = dist(generator);
+    //int random_con_id = 0;
     assert(random_con_id >= lower_bound && random_con_id <= upper_bound);
     //send the request.
     contexts[random_con_id]->start_time.reset();
@@ -259,7 +260,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, functio
   }
 
   clock_gettime(CLOCK_MONOTONIC, &endT);
-  printf("thread %d finished test\n", thread_id);
+  printf("thread %zu finished test\n", thread_id);
  
   int64_t delta_ms = (endT.tv_sec - startT.tv_sec) * 1000 + (endT.tv_nsec - startT.tv_nsec) / 1000000;
   int64_t delta_s = delta_ms / 1000;
@@ -274,7 +275,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, functio
     seperate_rps[opts.req_type_array[thread_id]] = rps;
   }
 
-  for (int j = 0; j < contexts.size(); j++) {
+  for (size_t j = 0; j < contexts.size(); j++) {
     for (size_t i = 0; i < contexts[j]->num_resps; i++) {
       //fprintf(perf_log, "%zu %d %f %d\n", thread_id, opts.req_type_array[thread_id], c.latency_array[i], 0);
       fprintf(perf_log, "%zu %d %f %f\n", thread_id, opts.req_type_array[thread_id], contexts[j]->latency_array[i], contexts[j]->delayed_latency_array[i]);
@@ -345,7 +346,7 @@ int main(int argc, char **argv) {
   for (size_t i = 0; i < num_threads; i++) {
     threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
     bind_to_core(threads[i], i); 
-    printf("Pin thread %d to cpu core %d\n", i, i+1); 
+    printf("Pin thread %zu to cpu core %zu\n", i, i+1); 
   }
 
   for (size_t i = 0; i < num_threads; i++) threads[i].join();

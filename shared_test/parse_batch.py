@@ -168,18 +168,18 @@ def get_values(key, files_list, latency_dict, slow_down_dict, deadline_miss_rate
                 for match in re.finditer(seperate_99_slow_down_rule, rt):
                     r_type, slow_down = match.groups()
                     print("type:", r_type, "99th slow down:", slow_down)
-                    seperate_99_slow_down[key][r_type].append(float(latency))
+                    seperate_99_slow_down[key][r_type].append(float(slow_down))
 
 
                 for match in re.finditer(seperate_99_9_slow_down_rule, rt):
                     r_type, slow_down = match.groups()
                     print("type:", r_type, "99.9th slow down:", slow_down)
-                    seperate_99_9_slow_down[key][r_type].append(float(latency))
+                    seperate_99_9_slow_down[key][r_type].append(float(slow_down))
 
                 for match in re.finditer(seperate_99_99_slow_down_rule, rt):
                     r_type, slow_down = match.groups()
                     print("type:", r_type, "99.99th slow down:", slow_down)
-                    seperate_99_99_slow_down[key][r_type].append(float(latency))
+                    seperate_99_99_slow_down[key][r_type].append(float(slow_down))
 
                 for match in re.finditer(seperate_sending_service_rate_rule, rt):
                     r_type, sending_rate, service_rate = match.groups()
@@ -203,7 +203,7 @@ if __name__ == "__main__":
     #file_folders = ['EDF_SRSF_INTERRUPT']
     #file_folders = ['EDF_INTERRUPT','EDF_SRSF_INTERRUPT_1']
     #file_folders = ['DARC', 'EDF_SRSF_INTERRUPT']
-    file_folders = ['rfaas','sledge']
+    file_folders = ['rfaas']
     #file_folders = ['EDF_INTERRUPT-disable-busy-loop-false-disable-autoscaling-true-9','EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-false-9', 'EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-true-27', 'EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-false-27']
     #file_folders = ['EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-true-27', 'EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-false-27']
     latency = defaultdict(list)
@@ -287,12 +287,12 @@ if __name__ == "__main__":
     f11.write(js11)
     f11.close()
 
-    js12 = json.dumps(seperate_99_9_latency)
+    js12 = json.dumps(seperate_99_9_slow_down)
     f12 = open("seperate_99_9_slow_down.txt", 'w')
     f12.write(js12)
     f12.close()
 
-    js13 = json.dumps(seperate_99_99_latency)
+    js13 = json.dumps(seperate_99_99_slow_down)
     f13 = open("seperate_99_99_slow_down.txt", 'w')
     f13.write(js13)
     f13.close()

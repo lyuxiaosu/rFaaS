@@ -49,7 +49,7 @@ namespace rdmalib {
       long sum = std::accumulate(_measurements.begin(), _measurements.end(), 0L,
         [idx](long x, const std::array<uint64_t, Cols> & y) {
           uint64_t total_ts = 0;
-          for (int i = idx; i < y.size(); i++) {
+          for (size_t i = idx; i < y.size(); i++) {
             total_ts += y[i];
           }
           return x + total_ts;

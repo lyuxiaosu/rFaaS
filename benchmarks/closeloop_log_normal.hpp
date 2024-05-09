@@ -1,10 +1,10 @@
 
-#ifndef __TESTS__MULTI_FUNCTIONS_HPP__
-#define __TESTS__MULTI_FUNCTIONS_HPP__
+#ifndef __TESTS__CLOSELOOP_LOG_NORMAL_HPP__
+#define __TESTS__CLOSELOOP_LOG_NORMAL_HPP__
 
 #include <string>
 
-namespace multi_functions {
+namespace closeloop_log_normal {
 
   struct Options {
 
@@ -13,7 +13,6 @@ namespace multi_functions {
     std::string executors_database;
     std::string output_stats;
     bool verbose;
-    bool share_cores;
     std::vector<std::string> fnames;
     std::vector<std::string> flibs;
     std::vector<int> req_parameters;
@@ -21,6 +20,7 @@ namespace multi_functions {
     int input_size;
     int output_size;
     int test_ms;
+    std::vector<int> rps_array;
 
   };
 

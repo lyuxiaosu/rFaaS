@@ -102,7 +102,7 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
   //the last parameter is skip_exec_manager, not skip_resource_manager
   //This function will accept executor connection and then send function code data to executor 
   if (!executor.allocate(opts.flibs[thread_id], opts.input_size, opts.output_size,
-                         settings.benchmark.hot_timeout, settings.benchmark.numcores, thread_id, false)) {
+                         settings.benchmark.hot_timeout, settings.benchmark.numcores, opts.share_cores ? 0: thread_id, false)) {
     spdlog::error("Connection to executor and allocation failed!");
     return;
   }
@@ -237,7 +237,7 @@ int main(int argc, char **argv) {
   
   for (size_t i = 0; i < num_threads; i++) {
     threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
-    bind_to_core(threads[i], i + 1); 
+    bind_to_core(threads[i], i); 
   }
 
   for (size_t i = 0; i < num_threads; i++) threads[i].join();

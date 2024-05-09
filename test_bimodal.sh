@@ -1,3 +1,4 @@
+#This is the old way to show the motivation, but this doesn't work if we don't control the sending rate
 #!/bin/bash
 function usage {
         echo "$0"

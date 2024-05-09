@@ -3,9 +3,9 @@
 
 #include <cxxopts.hpp>
 
-#include "multi_functions.hpp"
+#include "closeloop_log_normal.hpp"
 
-namespace multi_functions {
+namespace closeloop_log_normal {
 
   // Compilation time of client.cpp decreased from 11 to 1.5 seconds!!!
 
@@ -18,11 +18,11 @@ namespace multi_functions {
       ("executors-database", "JSON configuration of executor servers.", cxxopts::value<std::string>()->default_value(""))
       ("output-stats", "Output file for benchmarking statistics.", cxxopts::value<std::string>()->default_value(""))
       ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
-      ("share-cores", "Share cpu cores or not", cxxopts::value<bool>()->default_value("false"))
       ("names", "Function name", cxxopts::value<std::vector<std::string>>())
       ("functions", "Functions library", cxxopts::value<std::vector<std::string>>())
       ("req-parameters", "Request parameters", cxxopts::value<std::vector<int>>())
       ("req-type", "Request type array", cxxopts::value<std::vector<int>>())
+      ("rps", "Request per second", cxxopts::value<std::vector<int>>())
       ("input-size", "Packet size", cxxopts::value<int>()->default_value("1"))
       ("output-size", "response buffer size", cxxopts::value<int>()->default_value("1"))
       ("test-ms", "Testing time lasting in ms", cxxopts::value<int>()->default_value("10000"))
@@ -38,8 +38,7 @@ namespace multi_functions {
     Options result;
     result.json_config = parsed_options["config"].as<std::string>();
     result.device_database = parsed_options["device-database"].as<std::string>();
-    result.verbose = parsed_options["verbose"].as<bool>();
-    result.share_cores = parsed_options["share-cores"].as<bool>();
+    result.verbose = parsed_options["verbose"].as<bool>();;
     result.fnames = parsed_options["names"].as<std::vector<std::string>>();
     result.flibs = parsed_options["functions"].as<std::vector<std::string>>();
     result.req_parameters = parsed_options["req-parameters"].as<std::vector<int>>();
@@ -48,7 +47,8 @@ namespace multi_functions {
     result.output_size = parsed_options["output-size"].as<int>();
     result.output_stats = parsed_options["output-stats"].as<std::string>();
     result.executors_database = parsed_options["executors-database"].as<std::string>();
-    result.test_ms = parsed_options["test-ms"].as<int>(); 
+    result.test_ms = parsed_options["test-ms"].as<int>();
+    result.rps_array = parsed_options["rps"].as<std::vector<int>>(); 
 
     return result;
   }

@@ -2,9 +2,9 @@ import sys
 import os
 
 
-def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param, func_types=0):
-    function = "./examples/libfibonacci.so"
-    name = "fibonacci"
+def generate_config(func_name, type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param, func_types=0,input_size=1):
+    function = "./examples/lib" + func_name + ".so"
+    name = func_name 
     type1 = "1"
     type2 = "2"
 
@@ -51,27 +51,29 @@ def generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, typ
         config.append("--req-type " + ",".join(req_type1) + "," + ",".join(req_type2))
     config.append("--executors-database executors_database.json")
     config.append("--test-ms 10000")
-    config.append("--input-size 1")
+    config.append("--input-size {}".format(input_size))
     config.append("--output-size 4")
     config.append(f"--output-stats client.log")
     return "\n".join(config)
 
 import sys
 
-if len(sys.argv) < 7 or len(sys.argv) > 8:
-    print("Usage: <type1_concurrency> <type2_concurrency> <type1_rps> <type2_rps> <type1_param> <type2_param> [optional_func_type]")
+if len(sys.argv) < 8 or len(sys.argv) > 10:
+    print("Usage: <func_name> <type1_concurrency> <type2_concurrency> <type1_rps> <type2_rps> <type1_param> <type2_param> [optional_func_type] [optional_input_size]")
     sys.exit(1)
 
-type1_con = int(sys.argv[1])
-type2_con = int(sys.argv[2])
-type1_rps = sys.argv[3]
-type2_rps = sys.argv[4]
-type1_param = sys.argv[5]
-type2_param = sys.argv[6]
+func_name = sys.argv[1]
+type1_con = int(sys.argv[2])
+type2_con = int(sys.argv[3])
+type1_rps = sys.argv[4]
+type2_rps = sys.argv[5]
+type1_param = sys.argv[6]
+type2_param = sys.argv[7]
 
-optional_cons = sys.argv[7] if len(sys.argv) == 8 else "0"
+optional_cons = sys.argv[8] if len(sys.argv) == 9 else "0"
+input_size = sys.argv[9] if len(sys.argv) == 10 else "1"
 
-config_content = generate_config(type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param, optional_cons)
+config_content = generate_config(func_name, type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param, optional_cons, input_size)
 with open("client_config", "w") as f:
     f.write(config_content)
 

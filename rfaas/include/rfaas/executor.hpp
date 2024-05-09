@@ -258,7 +258,7 @@ namespace rfaas {
         );
       }
       _connections[cid].conn->poll_wc(rdmalib::QueueType::SEND, false);
-      for(int i = 0; i < _connections.size(); ++i) {
+      for(size_t i = 0; i < _connections.size(); ++i) {
         _connections[i].conn->receive_wcs().refill();
       }
     }

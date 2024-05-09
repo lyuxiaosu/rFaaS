@@ -1,0 +1,12 @@
+--config multi_functions.json
+--device-database client_devices.json
+--names hash,hash,hash,hash,hash,hash,hash,hash,hash
+--functions ./examples/libhash.so,./examples/libhash.so,./examples/libhash.so,./examples/libhash.so,./examples/libhash.so,./examples/libhash.so,./examples/libhash.so,./examples/libhash.so,./examples/libhash.so
+--rps 156,156,156,156,156,156,156,156,156
+--req-parameters 1,1,1,1,1,1,1,1,1
+--req-type 1,1,1,1,1,1,1,1,1
+--executors-database executors_database.json
+--test-ms 10000
+--input-size 4
+--output-size 4
+--output-stats client-1404-52.log

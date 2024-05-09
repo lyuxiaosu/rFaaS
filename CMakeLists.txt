@@ -199,9 +199,15 @@ include(benchmarks)
 add_library(functions SHARED examples/functions.cpp)
 set_target_properties(functions PROPERTIES POSITION_INDEPENDENT_CODE On)
 set_target_properties(functions PROPERTIES LIBRARY_OUTPUT_DIRECTORY examples)
+
 add_library(fibonacci SHARED examples/fibonacci.cpp)
 set_target_properties(fibonacci PROPERTIES POSITION_INDEPENDENT_CODE On)
 set_target_properties(fibonacci PROPERTIES LIBRARY_OUTPUT_DIRECTORY examples)
+
+add_library(hash SHARED examples/hash.cpp)
+set_target_properties(hash PROPERTIES POSITION_INDEPENDENT_CODE On)
+set_target_properties(hash PROPERTIES LIBRARY_OUTPUT_DIRECTORY examples)
+
 if( ${RFAAS_WITH_EXAMPLES} )
   include(examples)
 endif()
