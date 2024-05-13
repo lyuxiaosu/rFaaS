@@ -1,0 +1,41 @@
+{
+  "config": {
+    "rdma_device": "rocep65s0f0",
+    "rdma_device_port": 10005,
+    "resource_manager_address": "10.10.1.1",
+    "resource_manager_port": 0
+  },
+  "benchmark": {
+    "pin_threads": false,
+    "repetitions": 10,
+    "warmup_repetitions": 1,
+    "memory": 512,
+    "numcores": 1,
+    "hot_timeout": 0
+  }
+}
+
+ 
+If "pin_threads" is true:
+we assume all executors have only thread.
+Then means all executors will pin their single thread to the same core.
+the pinned core index follows:
+pin_threads = PIN_THREADS_START_INDEX + core_start_index;
+
+"core_start_index" will be passed by client to the server, which can either be 0 or thread_id. If it is 0, then means 
+all fast executor's first thread starting with the same core index, for example, if one executor's single thread is 
+pinned to 1, then the following executors will pin their single thread to core 1 too and all executors will share the same cpu core. 
+
+If "core_start_index" is passed as the thread_id, then each executor's inside threads will start from a different cpu cores. 
+This is only suitable for a single thread case of an executor. For example, if the thread of one executor is pinned to core 1,
+then another executor's thread will be pinned to core 2,...
+
+====================================================================
+
+if "pin_threads" is false:
+Then all executors will pin their single thread to the same cpu core if core_start_index=0 or different cpu cores if core_start_index=thread_id
+
+
+we usually set pin_threads to false but control core_start_index with 0 or thread_id
+
+To summary, pin_threads to true or false, both pin threads to cores, but with different rules, the config option name is very confusing
