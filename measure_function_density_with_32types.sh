@@ -9,9 +9,9 @@ if [ $# != 0 ] ; then
         exit 1;
 fi
 
-rps=60000
+rps=40000
 chmod 400 ./id_rsa
-remote_ip="128.110.219.0"
+remote_ip="128.110.219.9"
 
 #concurrency=(100 200 400 600 800 1000 1200 1400 1600 1800 2000)
 concurrency=(1 10 20 24 28 30 32)
@@ -21,7 +21,7 @@ for(( i=0;i<${#concurrency[@]};i++ )) do
 	echo "i is $i"
         per_rps=$(($rps / ${concurrency[i]}))
         per_thread_con=1
-        python3 ./generate_config.py ${concurrency[i]} 0 $per_rps 0 1 0 $per_thread_con
+        python3 ./generate_config.py fibonacci ${concurrency[i]} 0 $per_rps 0 1 0 $per_thread_con
 	client_log="client-${concurrency[i]}.log"
         sed -i "s/^--output-stats .*/--output-stats $client_log/g" client_config
         mv client_config client_config_density 

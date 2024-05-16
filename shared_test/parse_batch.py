@@ -203,7 +203,9 @@ if __name__ == "__main__":
     #file_folders = ['EDF_SRSF_INTERRUPT']
     #file_folders = ['EDF_INTERRUPT','EDF_SRSF_INTERRUPT_1']
     #file_folders = ['DARC', 'EDF_SRSF_INTERRUPT']
-    file_folders = ['rfaas']
+    file_folders = ['rFaaS', 'Sledge_not_core_3', 'Sledge_more_density_not_core_3']
+    #file_folders = ['results']
+    #file_folders = ['rFaaS','Sledge']
     #file_folders = ['EDF_INTERRUPT-disable-busy-loop-false-disable-autoscaling-true-9','EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-false-9', 'EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-true-27', 'EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-false-27']
     #file_folders = ['EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-true-27', 'EDF_INTERRUPT-disable-busy-loop-true-disable-autoscaling-false-27']
     latency = defaultdict(list)
@@ -215,6 +217,7 @@ if __name__ == "__main__":
     deadline_miss_rate = defaultdict(list)
 
     rps_list = []
+    rps_dict = defaultdict(list)
 
     argv = sys.argv[1:]
     if len(argv) < 1:
@@ -224,6 +227,7 @@ if __name__ == "__main__":
     for key in file_folders:
         files_list, rps_list = file_name(key, argv[0])
         get_values(key, files_list, latency, slow_down, deadline_miss_rate, slow_down_99_9, latency_99_9, slow_down_99_99, latency_99_99)
+        rps_dict[key] = rps_list
 
     print("99 latency:")
     for key, value in latency.items():
@@ -262,7 +266,7 @@ if __name__ == "__main__":
     f7.write(js7)
     f7.close()
 
-    js3 = json.dumps(rps_list)
+    js3 = json.dumps(rps_dict)
     f3 = open("rps.txt", 'w')
     f3.write(js3)
     f3.close()

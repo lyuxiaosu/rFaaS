@@ -70,8 +70,8 @@ type2_rps = sys.argv[5]
 type1_param = sys.argv[6]
 type2_param = sys.argv[7]
 
-optional_cons = sys.argv[8] if len(sys.argv) == 9 else "0"
-input_size = sys.argv[9] if len(sys.argv) == 10 else "1"
+optional_cons = sys.argv[8] if len(sys.argv) >= 9 else "0"
+input_size = sys.argv[9] if len(sys.argv) >= 10 else "1"
 
 config_content = generate_config(func_name, type1_con, type2_con, type1_rps, type2_rps, type1_param, type2_param, optional_cons, input_size)
 with open("client_config", "w") as f:
