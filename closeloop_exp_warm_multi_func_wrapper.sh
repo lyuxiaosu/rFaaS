@@ -13,7 +13,7 @@ rps1=5000
 rps2=48
 
 chmod 400 ./id_rsa
-remote_ip="128.110.219.0"
+remote_ip="128.110.219.9"
 
 #concurrency=(2 4 6 8 10 14 18 20 24 28 30 32)
 concurrency=(32)
@@ -30,7 +30,7 @@ for(( i=0;i<${#concurrency[@]};i++ )) do
         per_rps2=$(($rps2 / $con2))
 
         rps=$(($rps1 / ${concurrency[i]}))
-        python3 ./generate_config.py $con1 $con2 $per_rps1 $per_rps2 1 32 
+        python3 ./generate_config.py fibonacci $con1 $con2 $per_rps1 $per_rps2 1 32 
         #python3 ./generate_config.py ${concurrency[i]} 0 $rps 0 1 1
 	client_log="client-${concurrency[i]}.log"
         sed -i "s/^--output-stats .*/--output-stats $client_log/g" client_config
