@@ -210,30 +210,6 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, functio
   std::chrono::duration<double, std::milli> interval(0);
 
   while (total_send_out < max_requests && ctrl_c_pressed != 1) {
-    //wait for the interval to send next request.
-    /*auto current = std::chrono::high_resolution_clock::now();
-    c.next_should_send_ts = std::chrono::time_point_cast<std::chrono::high_resolution_clock::duration>(c.next_should_send_ts + interval);
-    
-    while (current < c.next_should_send_ts && ctrl_c_pressed != 1) {
-        executor.poll_queue_once2(0);
-        current = std::chrono::high_resolution_clock::now();
-    }
-
-    //send the request.
-    c.start_time.reset();
-    executor.async_callback(opts.fnames[thread_id], c.ins[0], c.outs[0], reinterpret_cast<void *>(0), return_callback);
-    total_send_out++;
-
-    //wait for the request response.
-    while (c.num_resps < total_send_out && ctrl_c_pressed != 1) {
-        executor.poll_queue_once2(0);
-    }
-
-    //generate next request interval.
-    double ms = ran_expo2(generator, opts.rps_array[thread_id]) * 1000;
-    interval = std::chrono::duration<double, std::milli>(ms);
-    c.exp_nums.push_back(ms);*/
-
     int random_con_id = dist(generator);
     //int random_con_id = 0;
     assert(random_con_id >= lower_bound && random_con_id <= upper_bound);
@@ -342,11 +318,17 @@ int main(int argc, char **argv) {
 
   std::vector<std::thread> threads(num_threads);
   max_cons = num_threads * opts.connections;
- 
-  for (size_t i = 0; i < num_threads; i++) {
-    threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
-    bind_to_core(threads[i], i); 
-    printf("Pin thread %zu to cpu core %zu\n", i, i+1); 
+
+  if (num_threads <= 32) { 
+    for (size_t i = 0; i < num_threads; i++) {
+      threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
+      bind_to_core(threads[i], i); 
+      printf("Pin thread %zu to cpu core %zu\n", i, i+1); 
+    }
+  } else {
+    for (size_t i = 0; i < num_threads; i++) {
+      threads[i] = std::thread(client_func, i, std::ref(settings), std::ref(opts));
+    }
   }
 
   for (size_t i = 0; i < num_threads; i++) threads[i].join();
