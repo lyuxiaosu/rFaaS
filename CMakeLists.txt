@@ -196,9 +196,9 @@ include(benchmarks)
 ###
 # Examples
 ###
-add_library(functions SHARED examples/functions.cpp)
-set_target_properties(functions PROPERTIES POSITION_INDEPENDENT_CODE On)
-set_target_properties(functions PROPERTIES LIBRARY_OUTPUT_DIRECTORY examples)
+add_library(empty SHARED examples/empty.cpp)
+set_target_properties(empty PROPERTIES POSITION_INDEPENDENT_CODE On)
+set_target_properties(empty PROPERTIES LIBRARY_OUTPUT_DIRECTORY examples)
 
 add_library(fibonacci SHARED examples/fibonacci.cpp)
 set_target_properties(fibonacci PROPERTIES POSITION_INDEPENDENT_CODE On)
