@@ -13,7 +13,7 @@ if [ $# != 0 ] ; then
 fi
 
 chmod 400 ./id_rsa
-remote_ip="128.110.219.0"
+remote_ip="128.110.219.9"
 
 #worker_count=(1 3 6 9 12 15)
 worker_count=(17)
@@ -21,7 +21,7 @@ worker_count=(17)
 path="/my_mount/rFaaS"
 for(( i=0;i<${#worker_count[@]};i++ )) do  
 
-        python3 ./generate_config.py ${worker_count[i]} 0 0 0 1 0
+        python3 ./generate_config.py empty ${worker_count[i]} 0 0 0 1 0
         client_log="client-${worker_count[i]}.log"
         sed -i "s/^--output-stats .*/--output-stats $client_log/g" client_config
         cp client_config throughput_config
