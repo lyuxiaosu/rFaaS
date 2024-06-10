@@ -1,0 +1,10 @@
+--config multi_functions.json
+--device-database client_devices.json
+--names trap,trap 
+--functions ./examples/libtrap.so,./examples/libtrap.so
+--req-type 1,1
+--executors-database executors_database.json
+--test-ms 20000
+--input-size 1
+--output-size 4
+--output-stats client.log

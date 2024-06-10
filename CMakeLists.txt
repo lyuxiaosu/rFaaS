@@ -204,6 +204,10 @@ add_library(fibonacci SHARED examples/fibonacci.cpp)
 set_target_properties(fibonacci PROPERTIES POSITION_INDEPENDENT_CODE On)
 set_target_properties(fibonacci PROPERTIES LIBRARY_OUTPUT_DIRECTORY examples)
 
+add_library(trap SHARED examples/trap.cpp)
+set_target_properties(trap PROPERTIES POSITION_INDEPENDENT_CODE On)
+set_target_properties(trap PROPERTIES LIBRARY_OUTPUT_DIRECTORY examples)
+
 add_library(hash SHARED examples/hash.cpp)
 set_target_properties(hash PROPERTIES POSITION_INDEPENDENT_CODE On)
 set_target_properties(hash PROPERTIES LIBRARY_OUTPUT_DIRECTORY examples)
