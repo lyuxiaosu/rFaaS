@@ -1,4 +1,4 @@
 1.closeloop_exp_warm_multi_func_wrapper.sh vs closeloop_exp_multi_func_wrapper.sh: motivition test to show rfaas has longer latency then sledge. This test uses fib(1) and fib(32) to test
 2. measure_throughput.sh to measure throughput scaling with cores for rfaas and sledge
-3. measure_function_density.sh to measure function density. This test will create maximum 2000 function types in both platform to see their latency variation
+3. measure_function_density_with_32types.sh to measure function density that less than 64 types. Sledge uses measure_function_density.sh to measure function density that beyond 32 types with openloop.
 
