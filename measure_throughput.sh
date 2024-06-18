@@ -16,7 +16,7 @@ chmod 400 ./id_rsa
 remote_ip="128.110.219.9"
 
 #worker_count=(1 3 6 9 12 15)
-worker_count=(17)
+worker_count=(19)
 
 path="/my_mount/rFaaS"
 for(( i=0;i<${#worker_count[@]};i++ )) do  
