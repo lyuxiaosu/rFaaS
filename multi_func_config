@@ -1,7 +1,7 @@
 --config multi_functions.json
 --device-database client_devices.json
 --names empty
---functions ./examples/libfunctions.so
+--functions ./examples/libempty.so
 --req-parameters 1
 --req-type 1
 --executors-database executors_database.json
