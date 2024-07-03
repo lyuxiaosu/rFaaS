@@ -72,7 +72,7 @@ namespace rdmalib {
 
     void export_csv(std::string fname, const std::array<std::string, Cols> & headers)
     {
-      std::ofstream of(fname);
+      std::ofstream of(fname, std::ios::app);
       of << "id";
       for(int j = 0; j < Cols; ++j)
         of << ',' << headers[j];
