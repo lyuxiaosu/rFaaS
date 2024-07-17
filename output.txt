@@ -1,0 +1,1700 @@
+i is 0
+start server...
+start client...
+[15:03:41:028059] [T 292038] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:03:41:059577] [T 292039] [info] Listening on device rocep65s0f0, port 37920 
+[15:03:41:083325] [T 292039] [error] POLLER 0x7ff0d4010840 
+network init cost 179 warmup repetion 1
+[15:03:41:211504] [T 292039] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 96347
+[15:03:42:212088] [T 292039] [info] thread 0 Executed 96347 repetitions, avg 10.338211578980145 usec/iter, median 9.929 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 96347
+client exit
+353864
+i is 1
+start server...
+start client...
+[15:03:44:415826] [T 292045] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:03:44:443573] [T 292046] [info] Listening on device rocep65s0f0, port 35427 
+[15:03:44:467230] [T 292046] [error] POLLER 0x7fd6cc010840 
+network init cost 174 warmup repetion 1
+[15:03:44:595566] [T 292046] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 93975
+[15:03:45:596033] [T 292046] [info] thread 0 Executed 93975 repetitions, avg 10.599663931896782 usec/iter, median 10.119 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 93975
+client exit
+353947
+i is 2
+start server...
+start client...
+[15:03:47:800779] [T 292052] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:03:47:827577] [T 292053] [info] Listening on device rocep65s0f0, port 48764 
+[15:03:47:851406] [T 292053] [error] POLLER 0x7fc0c0010840 
+network init cost 173 warmup repetion 1
+[15:03:47:979507] [T 292053] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84579
+[15:03:48:980003] [T 292053] [info] thread 0 Executed 84579 repetitions, avg 11.781291195213942 usec/iter, median 11.743 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84579
+client exit
+354025
+i is 3
+start server...
+start client...
+[15:03:51:184638] [T 292059] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:03:51:215585] [T 292060] [info] Listening on device rocep65s0f0, port 40016 
+[15:03:51:239598] [T 292060] [error] POLLER 0x7f4afc010840 
+network init cost 182 warmup repetion 1
+[15:03:51:371496] [T 292060] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83378
+[15:03:52:372110] [T 292060] [info] thread 0 Executed 83378 repetitions, avg 11.951410947732017 usec/iter, median 11.903 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83378
+client exit
+354105
+i is 4
+start server...
+start client...
+[15:03:54:574506] [T 292066] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:03:54:599575] [T 292067] [info] Listening on device rocep65s0f0, port 56959 
+[15:03:54:623418] [T 292067] [error] POLLER 0x7fc450010840 
+network init cost 172 warmup repetion 1
+[15:03:54:751355] [T 292067] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83467
+[15:03:55:752176] [T 292067] [info] thread 0 Executed 83467 repetitions, avg 11.938556555285322 usec/iter, median 11.894 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83467
+client exit
+354181
+i is 5
+start server...
+start client...
+[15:03:57:954329] [T 292073] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345315
+[15:03:57:979588] [T 292074] [info] Listening on device rocep65s0f0, port 60440 
+[15:03:58:003425] [T 292074] [error] POLLER 0x7fa8a8010840 
+network init cost 172 warmup repetion 1
+[15:03:58:131389] [T 292074] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84961
+[15:03:59:132104] [T 292074] [info] thread 0 Executed 84961 repetitions, avg 11.727903673450172 usec/iter, median 11.683 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84961
+client exit
+354257
+i is 6
+start server...
+start client...
+[15:04:01:338010] [T 292080] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:04:01:363560] [T 292081] [info] Listening on device rocep65s0f0, port 35014 
+[15:04:01:387126] [T 292081] [error] POLLER 0x7f0dc0010840 
+network init cost 172 warmup repetion 1
+[15:04:01:515345] [T 292081] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 96786
+[15:04:02:515976] [T 292081] [info] thread 0 Executed 96786 repetitions, avg 10.290850277932758 usec/iter, median 9.989 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 96786
+client exit
+354336
+i is 7
+start server...
+start client...
+[15:04:04:722300] [T 292087] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:04:04:747580] [T 292088] [info] Listening on device rocep65s0f0, port 47299 
+[15:04:04:771520] [T 292088] [error] POLLER 0x7f33ec010840 
+network init cost 172 warmup repetion 1
+[15:04:04:899327] [T 292088] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 91214
+[15:04:05:899762] [T 292088] [info] thread 0 Executed 91214 repetitions, avg 10.921504516850485 usec/iter, median 11.572 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 91214
+client exit
+354409
+i is 8
+start server...
+start client...
+[15:04:08:106699] [T 292094] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345383
+[15:04:08:135575] [T 292095] [info] Listening on device rocep65s0f0, port 34315 
+[15:04:08:159375] [T 292095] [error] POLLER 0x7fd988010840 
+network init cost 176 warmup repetion 1
+[15:04:08:287370] [T 292095] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84700
+[15:04:09:288175] [T 292095] [info] thread 0 Executed 84700 repetitions, avg 11.764332703659976 usec/iter, median 11.713 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84700
+client exit
+354482
+i is 9
+start server...
+start client...
+[15:04:11:494358] [T 292112] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345341
+[15:04:11:519560] [T 292113] [info] Listening on device rocep65s0f0, port 41442 
+[15:04:11:543442] [T 292113] [error] POLLER 0x7f2328010840 
+network init cost 176 warmup repetion 1
+[15:04:11:675568] [T 292113] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84307
+[15:04:12:676374] [T 292113] [info] thread 0 Executed 84307 repetitions, avg 11.819179724103575 usec/iter, median 11.762 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84307
+client exit
+354559
+i is 10
+start server...
+start client...
+[15:04:14:882634] [T 292119] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:04:14:911565] [T 292120] [info] Listening on device rocep65s0f0, port 45211 
+[15:04:14:935470] [T 292120] [error] POLLER 0x7f6bc0010840 
+network init cost 180 warmup repetion 1
+[15:04:15:067567] [T 292120] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84385
+[15:04:16:068235] [T 292120] [info] thread 0 Executed 84385 repetitions, avg 11.808247579546128 usec/iter, median 11.733 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84385
+client exit
+354632
+i is 11
+start server...
+start client...
+[15:04:18:274997] [T 292126] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:04:18:299582] [T 292127] [info] Listening on device rocep65s0f0, port 60200 
+[15:04:18:323457] [T 292127] [error] POLLER 0x7fa8a0010840 
+network init cost 171 warmup repetion 1
+[15:04:18:451560] [T 292127] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83954
+[15:04:19:452062] [T 292127] [info] thread 0 Executed 83954 repetitions, avg 11.869443683445695 usec/iter, median 11.832 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83954
+client exit
+354706
+i is 12
+start server...
+start client...
+[15:04:21:659541] [T 292133] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:04:21:683564] [T 292134] [info] Listening on device rocep65s0f0, port 33827 
+[15:04:21:707549] [T 292134] [error] POLLER 0x7f5178010840 
+network init cost 175 warmup repetion 1
+[15:04:21:839606] [T 292134] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 85431
+[15:04:22:840190] [T 292134] [info] thread 0 Executed 85431 repetitions, avg 11.663433203403915 usec/iter, median 11.613 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 85431
+client exit
+354781
+i is 13
+start server...
+start client...
+[15:04:25:047908] [T 292140] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345321
+[15:04:25:071560] [T 292141] [info] Listening on device rocep65s0f0, port 41274 
+[15:04:25:095528] [T 292141] [error] POLLER 0x7f6cd8010840 
+network init cost 171 warmup repetion 1
+[15:04:25:223622] [T 292141] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 95524
+[15:04:26:224132] [T 292141] [info] thread 0 Executed 95524 repetitions, avg 10.426884950378962 usec/iter, median 10.039 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 95524
+client exit
+354854
+i is 14
+start server...
+start client...
+[15:04:28:431978] [T 292147] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:04:28:459561] [T 292148] [info] Listening on device rocep65s0f0, port 59866 
+[15:04:28:483655] [T 292148] [error] POLLER 0x7f361c010840 
+network init cost 174 warmup repetion 1
+[15:04:28:611571] [T 292148] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 86466
+[15:04:29:612363] [T 292148] [info] thread 0 Executed 86466 repetitions, avg 11.523501931395 usec/iter, median 11.733 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 86466
+client exit
+354926
+i is 15
+start server...
+start client...
+[15:04:31:818717] [T 292154] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345342
+[15:04:31:843570] [T 292155] [info] Listening on device rocep65s0f0, port 50019 
+[15:04:31:867235] [T 292155] [error] POLLER 0x7f2880010840 
+network init cost 172 warmup repetion 1
+[15:04:31:995586] [T 292155] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83888
+[15:04:32:996114] [T 292155] [info] thread 0 Executed 83888 repetitions, avg 11.878466800972724 usec/iter, median 11.832 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83888
+client exit
+354999
+i is 16
+start server...
+start client...
+[15:04:35:203197] [T 292161] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345342
+[15:04:35:227553] [T 292162] [info] Listening on device rocep65s0f0, port 55659 
+[15:04:35:251540] [T 292162] [error] POLLER 0x7f9360010840 
+network init cost 171 warmup repetion 1
+[15:04:35:379580] [T 292162] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84998
+[15:04:36:380357] [T 292162] [info] thread 0 Executed 84998 repetitions, avg 11.722528588907975 usec/iter, median 11.683 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84998
+client exit
+355071
+i is 17
+start server...
+start client...
+[15:04:38:587295] [T 292168] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345341
+[15:04:38:611583] [T 292169] [info] Listening on device rocep65s0f0, port 52739 
+[15:04:38:635456] [T 292169] [error] POLLER 0x7f68a8010840 
+network init cost 171 warmup repetion 1
+[15:04:38:763438] [T 292169] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84912
+[15:04:39:763935] [T 292169] [info] thread 0 Executed 84912 repetitions, avg 11.734514850668928 usec/iter, median 11.693 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84912
+client exit
+355143
+i is 18
+start server...
+start client...
+[15:04:41:971868] [T 292177] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:04:41:995567] [T 292178] [info] Listening on device rocep65s0f0, port 59268 
+[15:04:42:019422] [T 292178] [error] POLLER 0x7ff2b0010840 
+network init cost 170 warmup repetion 1
+[15:04:42:147405] [T 292178] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 85256
+[15:04:43:147935] [T 292178] [info] thread 0 Executed 85256 repetitions, avg 11.687611147602514 usec/iter, median 11.632 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 85256
+client exit
+355216
+i is 19
+start server...
+start client...
+[15:04:45:354884] [T 292184] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:04:45:379558] [T 292185] [info] Listening on device rocep65s0f0, port 55526 
+[15:04:45:403375] [T 292185] [error] POLLER 0x7fa770010840 
+network init cost 171 warmup repetion 1
+[15:04:45:531472] [T 292185] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84655
+[15:04:46:532091] [T 292185] [info] thread 0 Executed 84655 repetitions, avg 11.77055168625598 usec/iter, median 11.713 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84655
+client exit
+355288
+i is 20
+start server...
+start client...
+[15:04:48:739288] [T 292191] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:04:48:763559] [T 292192] [info] Listening on device rocep65s0f0, port 60430 
+[15:04:48:787267] [T 292192] [error] POLLER 0x7fb62c010840 
+network init cost 171 warmup repetion 1
+[15:04:48:915434] [T 292192] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 93146
+[15:04:49:916027] [T 292192] [info] thread 0 Executed 93146 repetitions, avg 10.694349837888906 usec/iter, median 11.332 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 93146
+client exit
+355361
+i is 21
+start server...
+start client...
+[15:04:52:123701] [T 292198] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:04:52:147573] [T 292199] [info] Listening on device rocep65s0f0, port 59386 
+[15:04:52:171696] [T 292199] [error] POLLER 0x7f6404010840 
+network init cost 171 warmup repetion 1
+[15:04:52:299407] [T 292199] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84737
+[15:04:53:300021] [T 292199] [info] thread 0 Executed 84737 repetitions, avg 11.759537545582214 usec/iter, median 11.703 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84737
+client exit
+355434
+i is 22
+start server...
+start client...
+[15:04:55:507752] [T 292205] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:04:55:531587] [T 292206] [info] Listening on device rocep65s0f0, port 60641 
+[15:04:55:555277] [T 292206] [error] POLLER 0x7fd6a4010840 
+network init cost 171 warmup repetion 1
+[15:04:55:683642] [T 292206] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83903
+[15:04:56:684251] [T 292206] [info] thread 0 Executed 83903 repetitions, avg 11.876737029665208 usec/iter, median 11.823 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83903
+client exit
+355506
+i is 23
+start server...
+start client...
+[15:04:58:891771] [T 292212] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345383
+[15:04:58:915591] [T 292213] [info] Listening on device rocep65s0f0, port 48153 
+[15:04:58:939422] [T 292213] [error] POLLER 0x7f2c00010840 
+network init cost 171 warmup repetion 1
+[15:04:59:067594] [T 292213] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 100213
+[15:05:00:068237] [T 292213] [info] thread 0 Executed 100213 repetitions, avg 9.93752078073703 usec/iter, median 9.889 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 100213
+client exit
+355579
+i is 24
+start server...
+start client...
+[15:05:02:275762] [T 292223] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:05:02:299570] [T 292224] [info] Listening on device rocep65s0f0, port 58308 
+[15:05:02:323615] [T 292224] [error] POLLER 0x7fc92c010840 
+network init cost 171 warmup repetion 1
+[15:05:02:451584] [T 292224] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84293
+[15:05:03:452227] [T 292224] [info] thread 0 Executed 84293 repetitions, avg 11.821436382617774 usec/iter, median 11.772 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84293
+client exit
+355654
+i is 25
+start server...
+start client...
+[15:05:05:659684] [T 292230] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:05:05:687578] [T 292231] [info] Listening on device rocep65s0f0, port 50687 
+[15:05:05:711529] [T 292231] [error] POLLER 0x7f1320010840 
+network init cost 175 warmup repetion 1
+[15:05:05:839575] [T 292231] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 94649
+[15:05:06:840363] [T 292231] [info] thread 0 Executed 94649 repetitions, avg 10.524114581242275 usec/iter, median 9.979 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 94649
+client exit
+355733
+i is 26
+start server...
+start client...
+[15:05:09:047881] [T 292237] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:05:09:075572] [T 292238] [info] Listening on device rocep65s0f0, port 40857 
+[15:05:09:099567] [T 292238] [error] POLLER 0x7f5ecc010840 
+network init cost 179 warmup repetion 1
+[15:05:09:231466] [T 292238] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 95502
+[15:05:10:232196] [T 292238] [info] thread 0 Executed 95502 repetitions, avg 10.429764308600866 usec/iter, median 10.04 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 95502
+client exit
+355805
+i is 27
+start server...
+start client...
+[15:05:12:439362] [T 292244] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:05:12:463576] [T 292245] [info] Listening on device rocep65s0f0, port 35397 
+[15:05:12:487599] [T 292245] [error] POLLER 0x7f0b3c010840 
+network init cost 171 warmup repetion 1
+[15:05:12:615459] [T 292245] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 86914
+[15:05:13:616356] [T 292245] [info] thread 0 Executed 86914 repetitions, avg 11.46361917527671 usec/iter, median 11.692 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 86914
+client exit
+355877
+i is 28
+start server...
+start client...
+[15:05:15:823696] [T 292251] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:05:15:847572] [T 292252] [info] Listening on device rocep65s0f0, port 56946 
+[15:05:15:871463] [T 292252] [error] POLLER 0x7fb5ec010840 
+network init cost 170 warmup repetion 1
+[15:05:15:999468] [T 292252] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84607
+[15:05:17:000167] [T 292252] [info] thread 0 Executed 84607 repetitions, avg 11.777426288604962 usec/iter, median 11.723 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84607
+client exit
+355950
+i is 29
+start server...
+start client...
+[15:05:19:206827] [T 292258] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345341
+[15:05:19:231581] [T 292259] [info] Listening on device rocep65s0f0, port 43890 
+[15:05:19:255289] [T 292259] [error] POLLER 0x7f232c010840 
+network init cost 171 warmup repetion 1
+[15:05:19:383398] [T 292259] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 82771
+[15:05:20:384179] [T 292259] [info] thread 0 Executed 82771 repetitions, avg 12.039532964444067 usec/iter, median 12.003 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 82771
+client exit
+356023
+i is 30
+start server...
+start client...
+[15:05:22:591839] [T 292265] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:05:22:615570] [T 292266] [info] Listening on device rocep65s0f0, port 45884 
+[15:05:22:639295] [T 292266] [error] POLLER 0x7f8a2c010840 
+network init cost 170 warmup repetion 1
+[15:05:22:767448] [T 292266] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83315
+[15:05:23:768001] [T 292266] [info] thread 0 Executed 83315 repetitions, avg 11.96088162995859 usec/iter, median 11.913 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83315
+client exit
+356096
+i is 31
+start server...
+start client...
+[15:05:25:975800] [T 292273] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:05:25:999569] [T 292274] [info] Listening on device rocep65s0f0, port 48704 
+[15:05:26:023464] [T 292274] [error] POLLER 0x7f271c010840 
+network init cost 171 warmup repetion 1
+[15:05:26:151483] [T 292274] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83173
+[15:05:27:151990] [T 292274] [info] thread 0 Executed 83173 repetitions, avg 11.98108263498972 usec/iter, median 11.913 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83173
+client exit
+356169
+i is 32
+start server...
+start client...
+[15:05:29:356478] [T 292280] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345321
+[15:05:29:387589] [T 292281] [info] Listening on device rocep65s0f0, port 42620 
+[15:05:29:411432] [T 292281] [error] POLLER 0x7feb90010840 
+network init cost 178 warmup repetion 1
+[15:05:29:539471] [T 292281] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84175
+[15:05:30:540257] [T 292281] [info] thread 0 Executed 84175 repetitions, avg 11.837734553014553 usec/iter, median 11.783 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84175
+client exit
+356242
+i is 33
+start server...
+start client...
+[15:05:32:743665] [T 292287] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:05:32:771582] [T 292288] [info] Listening on device rocep65s0f0, port 41700 
+[15:05:32:795407] [T 292288] [error] POLLER 0x7f82e4010840 
+network init cost 175 warmup repetion 1
+[15:05:32:923495] [T 292288] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 90540
+[15:05:33:924116] [T 292288] [info] thread 0 Executed 90540 repetitions, avg 11.003365385464987 usec/iter, median 11.552 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 90540
+client exit
+356314
+i is 34
+start server...
+start client...
+[15:05:36:131318] [T 292294] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:05:36:159584] [T 292295] [info] Listening on device rocep65s0f0, port 47443 
+[15:05:36:183493] [T 292295] [error] POLLER 0x7f49f8010840 
+network init cost 176 warmup repetion 1
+[15:05:36:311502] [T 292295] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84220
+[15:05:37:312058] [T 292295] [info] thread 0 Executed 84220 repetitions, avg 11.831543445737355 usec/iter, median 11.783 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84220
+client exit
+356388
+i is 35
+start server...
+start client...
+[15:05:39:520447] [T 292301] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:05:39:547579] [T 292302] [info] Listening on device rocep65s0f0, port 35065 
+[15:05:39:571359] [T 292302] [error] POLLER 0x7f5638010840 
+network init cost 174 warmup repetion 1
+[15:05:39:699454] [T 292302] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84577
+[15:05:40:700241] [T 292302] [info] thread 0 Executed 84577 repetitions, avg 11.781569090887594 usec/iter, median 11.732 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84577
+client exit
+356460
+i is 36
+start server...
+start client...
+[15:05:42:907893] [T 292319] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345399
+[15:05:42:935576] [T 292320] [info] Listening on device rocep65s0f0, port 37467 
+[15:05:42:959329] [T 292320] [error] POLLER 0x7fa310010840 
+network init cost 175 warmup repetion 1
+[15:05:43:087855] [T 292320] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84848
+[15:05:44:088512] [T 292320] [info] thread 0 Executed 84848 repetitions, avg 11.744073602206297 usec/iter, median 11.693 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84848
+client exit
+356532
+i is 37
+start server...
+start client...
+[15:05:46:296429] [T 292326] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:05:46:323585] [T 292327] [info] Listening on device rocep65s0f0, port 58055 
+[15:05:46:347499] [T 292327] [error] POLLER 0x7f7944010840 
+network init cost 174 warmup repetion 1
+[15:05:46:475717] [T 292327] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 99055
+[15:05:47:476466] [T 292327] [info] thread 0 Executed 99055 repetitions, avg 10.053952965524203 usec/iter, median 9.949 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 99055
+client exit
+356604
+i is 38
+start server...
+start client...
+[15:05:49:683852] [T 292333] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:05:49:711567] [T 292334] [info] Listening on device rocep65s0f0, port 36721 
+[15:05:49:735283] [T 292334] [error] POLLER 0x7fdf50010840 
+network init cost 175 warmup repetion 1
+[15:05:49:863685] [T 292334] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 99716
+[15:05:50:864766] [T 292334] [info] thread 0 Executed 99716 repetitions, avg 9.987487153515985 usec/iter, median 9.929 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 99716
+client exit
+356678
+i is 39
+start server...
+start client...
+[15:05:53:071376] [T 292340] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:05:53:095587] [T 292341] [info] Listening on device rocep65s0f0, port 55405 
+[15:05:53:119417] [T 292341] [error] POLLER 0x7f1dfc010840 
+network init cost 172 warmup repetion 1
+[15:05:53:247685] [T 292341] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 96129
+[15:05:54:248270] [T 292341] [info] thread 0 Executed 96129 repetitions, avg 10.361224094706072 usec/iter, median 9.999 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 96129
+client exit
+356750
+i is 40
+start server...
+start client...
+[15:05:56:455761] [T 292347] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345326
+[15:05:56:479582] [T 292348] [info] Listening on device rocep65s0f0, port 34382 
+[15:05:56:503228] [T 292348] [error] POLLER 0x7f7460010840 
+network init cost 170 warmup repetion 1
+[15:05:56:631486] [T 292348] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 97337
+[15:05:57:632351] [T 292348] [info] thread 0 Executed 97337 repetitions, avg 10.2323224775779 usec/iter, median 10.13 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 97337
+client exit
+356822
+i is 41
+start server...
+start client...
+[15:05:59:844180] [T 292354] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:05:59:871581] [T 292355] [info] Listening on device rocep65s0f0, port 58894 
+[15:05:59:895559] [T 292355] [error] POLLER 0x7ff6e4010840 
+network init cost 174 warmup repetion 1
+[15:06:00:023495] [T 292355] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83972
+[15:06:01:024067] [T 292355] [info] thread 0 Executed 83972 repetitions, avg 11.866885557090457 usec/iter, median 11.793 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83972
+client exit
+356894
+i is 42
+start server...
+start client...
+[15:06:03:231535] [T 292361] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:06:03:255570] [T 292362] [info] Listening on device rocep65s0f0, port 42775 
+[15:06:03:279509] [T 292362] [error] POLLER 0x7fdd64010840 
+network init cost 171 warmup repetion 1
+[15:06:03:407510] [T 292362] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84201
+[15:06:04:408216] [T 292362] [info] thread 0 Executed 84201 repetitions, avg 11.834393332620753 usec/iter, median 11.773 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84201
+client exit
+356966
+i is 43
+start server...
+start client...
+[15:06:06:612181] [T 292368] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345383
+[15:06:06:643573] [T 292369] [info] Listening on device rocep65s0f0, port 38237 
+[15:06:06:667489] [T 292369] [error] POLLER 0x7f8928010840 
+network init cost 178 warmup repetion 1
+[15:06:06:795584] [T 292369] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84720
+[15:06:07:796434] [T 292369] [info] thread 0 Executed 84720 repetitions, avg 11.761776817752596 usec/iter, median 11.703 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84720
+client exit
+357038
+i is 44
+start server...
+start client...
+[15:06:10:003767] [T 292375] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345404
+[15:06:10:027559] [T 292376] [info] Listening on device rocep65s0f0, port 48551 
+[15:06:10:051450] [T 292376] [error] POLLER 0x7f039c010840 
+network init cost 171 warmup repetion 1
+[15:06:10:179523] [T 292376] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 99039
+[15:06:11:180377] [T 292376] [info] thread 0 Executed 99039 repetitions, avg 10.056144801542827 usec/iter, median 10.01 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 99039
+client exit
+357110
+i is 45
+start server...
+start client...
+[15:06:13:388376] [T 292382] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:06:13:419562] [T 292383] [info] Listening on device rocep65s0f0, port 50247 
+[15:06:13:443556] [T 292383] [error] POLLER 0x7f52b0010840 
+network init cost 178 warmup repetion 1
+[15:06:13:571701] [T 292383] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84501
+[15:06:14:572310] [T 292383] [info] thread 0 Executed 84501 repetitions, avg 11.792096697080508 usec/iter, median 11.742 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84501
+client exit
+357182
+i is 46
+start server...
+start client...
+[15:06:16:780487] [T 292389] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345326
+[15:06:16:807587] [T 292390] [info] Listening on device rocep65s0f0, port 60150 
+[15:06:16:831375] [T 292390] [error] POLLER 0x7fd228010840 
+network init cost 174 warmup repetion 1
+[15:06:16:959703] [T 292390] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 93361
+[15:06:17:960138] [T 292390] [info] thread 0 Executed 93361 repetitions, avg 10.669414498559355 usec/iter, median 10.069 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 93361
+client exit
+357255
+i is 47
+start server...
+start client...
+[15:06:20:167707] [T 292396] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:06:20:191615] [T 292397] [info] Listening on device rocep65s0f0, port 57517 
+[15:06:20:215384] [T 292397] [error] POLLER 0x7f1060010840 
+network init cost 171 warmup repetion 1
+[15:06:20:343743] [T 292397] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84926
+[15:06:21:344183] [T 292397] [info] thread 0 Executed 84926 repetitions, avg 11.732984009608364 usec/iter, median 11.693 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84926
+client exit
+357327
+i is 48
+start server...
+start client...
+[15:06:23:552211] [T 292403] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:06:23:579599] [T 292404] [info] Listening on device rocep65s0f0, port 54847 
+[15:06:23:603769] [T 292404] [error] POLLER 0x7fb664010840 
+network init cost 178 warmup repetion 1
+[15:06:23:735709] [T 292404] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84587
+[15:06:24:736430] [T 292404] [info] thread 0 Executed 84587 repetitions, avg 11.780274474801091 usec/iter, median 11.733 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84587
+client exit
+357401
+i is 49
+start server...
+start client...
+[15:06:26:944172] [T 292410] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:06:26:971560] [T 292411] [info] Listening on device rocep65s0f0, port 60600 
+[15:06:26:995376] [T 292411] [error] POLLER 0x7fac54010840 
+network init cost 174 warmup repetion 1
+[15:06:27:123676] [T 292411] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84557
+[15:06:28:124390] [T 292411] [info] thread 0 Executed 84557 repetitions, avg 11.784402533202456 usec/iter, median 11.713 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84557
+client exit
+357473
+i is 50
+start server...
+start client...
+[15:06:30:331967] [T 292417] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:06:30:355570] [T 292418] [info] Listening on device rocep65s0f0, port 46060 
+[15:06:30:379446] [T 292418] [error] POLLER 0x7fa790010840 
+network init cost 170 warmup repetion 1
+[15:06:30:507703] [T 292418] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84042
+[15:06:31:508482] [T 292418] [info] thread 0 Executed 84042 repetitions, avg 11.8567094428976 usec/iter, median 11.782 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84042
+client exit
+357545
+i is 51
+start server...
+start client...
+[15:06:33:716151] [T 292424] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:06:33:747572] [T 292425] [info] Listening on device rocep65s0f0, port 42612 
+[15:06:33:771520] [T 292425] [error] POLLER 0x7f0d68010840 
+network init cost 178 warmup repetion 1
+[15:06:33:899715] [T 292425] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 85039
+[15:06:34:900496] [T 292425] [info] thread 0 Executed 85039 repetitions, avg 11.717317360269993 usec/iter, median 11.682 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 85039
+client exit
+357617
+i is 52
+start server...
+start client...
+[15:06:37:109039] [T 292431] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345399
+[15:06:37:135583] [T 292432] [info] Listening on device rocep65s0f0, port 44688 
+[15:06:37:159396] [T 292432] [error] POLLER 0x7fbdb4010840 
+network init cost 174 warmup repetion 1
+[15:06:37:287670] [T 292432] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 96603
+[15:06:38:288354] [T 292432] [info] thread 0 Executed 96603 repetitions, avg 10.3103688084221 usec/iter, median 10.0 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 96603
+client exit
+357689
+i is 53
+start server...
+start client...
+[15:06:40:496199] [T 292438] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345399
+[15:06:40:523594] [T 292439] [info] Listening on device rocep65s0f0, port 56115 
+[15:06:40:547389] [T 292439] [error] POLLER 0x7fdecc010840 
+network init cost 174 warmup repetion 1
+[15:06:40:675691] [T 292439] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 87706
+[15:06:41:676402] [T 292439] [info] thread 0 Executed 87706 repetitions, avg 11.359943105374773 usec/iter, median 11.672 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 87706
+client exit
+357761
+i is 54
+start server...
+start client...
+[15:06:43:880675] [T 292445] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:06:43:907571] [T 292446] [info] Listening on device rocep65s0f0, port 47364 
+[15:06:43:931622] [T 292446] [error] POLLER 0x7fd7e8010840 
+network init cost 174 warmup repetion 1
+[15:06:44:059745] [T 292446] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84917
+[15:06:45:060479] [T 292446] [info] thread 0 Executed 84917 repetitions, avg 11.733924373211488 usec/iter, median 11.692 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84917
+client exit
+357833
+i is 55
+start server...
+start client...
+[15:06:47:267993] [T 292452] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:06:47:295573] [T 292453] [info] Listening on device rocep65s0f0, port 59164 
+[15:06:47:319476] [T 292453] [error] POLLER 0x7facf8010840 
+network init cost 174 warmup repetion 1
+[15:06:47:447721] [T 292453] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83997
+[15:06:48:448336] [T 292453] [info] thread 0 Executed 83997 repetitions, avg 11.863405895448647 usec/iter, median 11.803 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83997
+client exit
+357906
+i is 56
+start server...
+start client...
+[15:06:50:656809] [T 292459] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345331
+[15:06:50:683575] [T 292460] [info] Listening on device rocep65s0f0, port 47804 
+[15:06:50:707405] [T 292460] [error] POLLER 0x7f45dc010840 
+network init cost 174 warmup repetion 1
+[15:06:50:835677] [T 292460] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84747
+[15:06:51:836318] [T 292460] [info] thread 0 Executed 84747 repetitions, avg 11.757709736037853 usec/iter, median 11.692 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84747
+client exit
+357979
+i is 57
+start server...
+start client...
+[15:06:54:043288] [T 292466] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345341
+[15:06:54:067590] [T 292467] [info] Listening on device rocep65s0f0, port 51491 
+[15:06:54:091743] [T 292467] [error] POLLER 0x7f4d54010840 
+network init cost 180 warmup repetion 1
+[15:06:54:227700] [T 292467] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84362
+[15:06:55:228317] [T 292467] [info] thread 0 Executed 84362 repetitions, avg 11.811529669756526 usec/iter, median 11.753 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84362
+client exit
+358051
+i is 58
+start server...
+start client...
+[15:06:57:436509] [T 292473] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:06:57:463575] [T 292474] [info] Listening on device rocep65s0f0, port 58473 
+[15:06:57:487202] [T 292474] [error] POLLER 0x7fc72c010840 
+network init cost 174 warmup repetion 1
+[15:06:57:615559] [T 292474] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 99089
+[15:06:58:616134] [T 292474] [info] thread 0 Executed 99089 repetitions, avg 10.05049937934584 usec/iter, median 9.859 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 99089
+client exit
+358123
+i is 59
+start server...
+start client...
+[15:07:00:824461] [T 292482] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:07:00:851587] [T 292483] [info] Listening on device rocep65s0f0, port 44287 
+[15:07:00:875470] [T 292483] [error] POLLER 0x7f266c010840 
+network init cost 174 warmup repetion 1
+[15:07:01:003640] [T 292483] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 92776
+[15:07:02:004199] [T 292483] [info] thread 0 Executed 92776 repetitions, avg 10.736860017676985 usec/iter, median 10.099 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 92776
+client exit
+358195
+i is 60
+start server...
+start client...
+[15:07:04:211714] [T 292489] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:07:04:239588] [T 292490] [info] Listening on device rocep65s0f0, port 46765 
+[15:07:04:263735] [T 292490] [error] POLLER 0x7f82bc010840 
+network init cost 175 warmup repetion 1
+[15:07:04:391583] [T 292490] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 85014
+[15:07:05:392207] [T 292490] [info] thread 0 Executed 85014 repetitions, avg 11.72097467475945 usec/iter, median 11.683 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 85014
+client exit
+358268
+i is 61
+start server...
+start client...
+[15:07:07:600355] [T 292496] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:07:07:627561] [T 292497] [info] Listening on device rocep65s0f0, port 43709 
+[15:07:07:651480] [T 292497] [error] POLLER 0x7fe4f4010840 
+network init cost 174 warmup repetion 1
+[15:07:07:779763] [T 292497] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84027
+[15:07:08:780456] [T 292497] [info] thread 0 Executed 84027 repetitions, avg 11.85879550620634 usec/iter, median 11.813 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84027
+client exit
+358340
+i is 62
+start server...
+start client...
+[15:07:10:988926] [T 292503] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:07:11:015562] [T 292504] [info] Listening on device rocep65s0f0, port 42775 
+[15:07:11:039290] [T 292504] [error] POLLER 0x7fa038010840 
+network init cost 178 warmup repetion 1
+[15:07:11:171607] [T 292504] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84511
+[15:07:12:172100] [T 292504] [info] thread 0 Executed 84511 repetitions, avg 11.79041854906462 usec/iter, median 11.753 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84511
+client exit
+358412
+i is 63
+start server...
+start client...
+[15:07:14:376053] [T 292522] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:07:14:403571] [T 292523] [info] Listening on device rocep65s0f0, port 57588 
+[15:07:14:427571] [T 292523] [error] POLLER 0x7f485c010840 
+network init cost 178 warmup repetion 1
+[15:07:14:559832] [T 292523] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84589
+[15:07:15:560485] [T 292523] [info] thread 0 Executed 84589 repetitions, avg 11.780389636950432 usec/iter, median 11.722 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84589
+client exit
+358484
+i is 64
+start server...
+start client...
+[15:07:17:767927] [T 292529] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:07:17:795573] [T 292530] [info] Listening on device rocep65s0f0, port 38473 
+[15:07:17:819350] [T 292530] [error] POLLER 0x7fe9ac010840 
+network init cost 175 warmup repetion 1
+[15:07:17:947795] [T 292530] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84064
+[15:07:18:948551] [T 292530] [info] thread 0 Executed 84064 repetitions, avg 11.853640916444615 usec/iter, median 11.773 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84064
+client exit
+358556
+i is 65
+start server...
+start client...
+[15:07:21:156845] [T 292536] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:07:21:183557] [T 292537] [info] Listening on device rocep65s0f0, port 49943 
+[15:07:21:207614] [T 292537] [error] POLLER 0x7f8c4c010840 
+network init cost 174 warmup repetion 1
+[15:07:21:335785] [T 292537] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 97311
+[15:07:22:336592] [T 292537] [info] thread 0 Executed 97311 repetitions, avg 10.23522953211867 usec/iter, median 9.98 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 97311
+client exit
+358629
+i is 66
+start server...
+start client...
+[15:07:24:544619] [T 292543] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345383
+[15:07:24:571595] [T 292544] [info] Listening on device rocep65s0f0, port 46563 
+[15:07:24:595476] [T 292544] [error] POLLER 0x7f4660010840 
+network init cost 174 warmup repetion 1
+[15:07:24:723673] [T 292544] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 88920
+[15:07:25:724121] [T 292544] [info] thread 0 Executed 88920 repetitions, avg 11.204547852001799 usec/iter, median 11.612 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 88920
+client exit
+358701
+i is 67
+start server...
+start client...
+[15:07:27:932436] [T 292550] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345321
+[15:07:27:959567] [T 292551] [info] Listening on device rocep65s0f0, port 36482 
+[15:07:27:983234] [T 292551] [error] POLLER 0x7fd670010840 
+network init cost 174 warmup repetion 1
+[15:07:28:111998] [T 292551] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 99206
+[15:07:29:112817] [T 292551] [info] thread 0 Executed 99206 repetitions, avg 10.038641120496745 usec/iter, median 9.989 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 99206
+client exit
+358773
+i is 68
+start server...
+start client...
+[15:07:31:320379] [T 292557] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:07:31:347588] [T 292558] [info] Listening on device rocep65s0f0, port 46923 
+[15:07:31:371650] [T 292558] [error] POLLER 0x7f409c010840 
+network init cost 174 warmup repetion 1
+[15:07:31:499732] [T 292558] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84828
+[15:07:32:500367] [T 292558] [info] thread 0 Executed 84828 repetitions, avg 11.746565025699061 usec/iter, median 11.703 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84828
+client exit
+358846
+i is 69
+start server...
+start client...
+[15:07:34:708018] [T 292564] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:07:34:731578] [T 292565] [info] Listening on device rocep65s0f0, port 53202 
+[15:07:34:755388] [T 292565] [error] POLLER 0x7f278c010840 
+network init cost 170 warmup repetion 1
+[15:07:34:883808] [T 292565] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 85069
+[15:07:35:884410] [T 292565] [info] thread 0 Executed 85069 repetitions, avg 11.71327183815491 usec/iter, median 11.682 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 85069
+client exit
+358918
+i is 70
+start server...
+start client...
+[15:07:38:091733] [T 292571] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345321
+[15:07:38:115567] [T 292572] [info] Listening on device rocep65s0f0, port 34970 
+[15:07:38:139265] [T 292572] [error] POLLER 0x7fa140010840 
+network init cost 176 warmup repetion 1
+[15:07:38:271628] [T 292572] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84746
+[15:07:39:272410] [T 292572] [info] thread 0 Executed 84746 repetitions, avg 11.757854482807447 usec/iter, median 11.723 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84746
+client exit
+358990
+i is 71
+start server...
+start client...
+[15:07:41:479290] [T 292578] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:07:41:507590] [T 292579] [info] Listening on device rocep65s0f0, port 34598 
+[15:07:41:531456] [T 292579] [error] POLLER 0x7f26e0010840 
+network init cost 175 warmup repetion 1
+[15:07:41:659666] [T 292579] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84242
+[15:07:42:660455] [T 292579] [info] thread 0 Executed 84242 repetitions, avg 11.828609577170534 usec/iter, median 11.742 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84242
+client exit
+359062
+i is 72
+start server...
+start client...
+[15:07:44:867475] [T 292585] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:07:44:891588] [T 292586] [info] Listening on device rocep65s0f0, port 41327 
+[15:07:44:915592] [T 292586] [error] POLLER 0x7f669c010840 
+network init cost 171 warmup repetion 1
+[15:07:45:043678] [T 292586] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 92879
+[15:07:46:044127] [T 292586] [info] thread 0 Executed 92879 repetitions, avg 10.724879337632833 usec/iter, median 10.26 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 92879
+client exit
+359134
+i is 73
+start server...
+start client...
+[15:07:48:252434] [T 292594] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345321
+[15:07:48:283579] [T 292595] [info] Listening on device rocep65s0f0, port 49234 
+[15:07:48:307319] [T 292595] [error] POLLER 0x7fa4d8010840 
+network init cost 178 warmup repetion 1
+[15:07:48:435673] [T 292595] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84687
+[15:07:49:436406] [T 292595] [info] thread 0 Executed 84687 repetitions, avg 11.766099590255884 usec/iter, median 11.722 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84687
+client exit
+359206
+i is 74
+start server...
+start client...
+[15:07:51:644212] [T 292601] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:07:51:675572] [T 292602] [info] Listening on device rocep65s0f0, port 59639 
+[15:07:51:699260] [T 292602] [error] POLLER 0x7f86f8010840 
+network init cost 178 warmup repetion 1
+[15:07:51:827626] [T 292602] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84008
+[15:07:52:828311] [T 292602] [info] thread 0 Executed 84008 repetitions, avg 11.861912270259976 usec/iter, median 11.802 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84008
+client exit
+359278
+i is 75
+start server...
+start client...
+[15:07:55:036446] [T 292608] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345326
+[15:07:55:063589] [T 292609] [info] Listening on device rocep65s0f0, port 36554 
+[15:07:55:087515] [T 292609] [error] POLLER 0x7effc4010840 
+network init cost 175 warmup repetion 1
+[15:07:55:215823] [T 292609] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84794
+[15:07:56:216643] [T 292609] [info] thread 0 Executed 84794 repetitions, avg 11.750954831709791 usec/iter, median 11.692 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84794
+client exit
+359350
+i is 76
+start server...
+start client...
+[15:07:58:424138] [T 292615] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345394
+[15:07:58:451591] [T 292616] [info] Listening on device rocep65s0f0, port 57097 
+[15:07:58:475534] [T 292616] [error] POLLER 0x7f3658010840 
+network init cost 174 warmup repetion 1
+[15:07:58:603773] [T 292616] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 100760
+[15:07:59:604432] [T 292616] [info] thread 0 Executed 100760 repetitions, avg 9.88364017467249 usec/iter, median 9.819 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 100760
+client exit
+359424
+i is 77
+start server...
+start client...
+[15:08:01:812494] [T 292622] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:08:01:839603] [T 292623] [info] Listening on device rocep65s0f0, port 32771 
+[15:08:01:863332] [T 292623] [error] POLLER 0x7fb37c010840 
+network init cost 174 warmup repetion 1
+[15:08:01:991856] [T 292623] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 96605
+[15:08:02:992510] [T 292623] [info] thread 0 Executed 96605 repetitions, avg 10.310032793333678 usec/iter, median 9.899 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 96605
+client exit
+359496
+i is 78
+start server...
+start client...
+[15:08:05:199237] [T 292629] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:08:05:223592] [T 292630] [info] Listening on device rocep65s0f0, port 55439 
+[15:08:05:247371] [T 292630] [error] POLLER 0x7fc168010840 
+network init cost 171 warmup repetion 1
+[15:08:05:375820] [T 292630] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 98817
+[15:08:06:376642] [T 292630] [info] thread 0 Executed 98817 repetitions, avg 10.07822080208871 usec/iter, median 10.02 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 98817
+client exit
+359568
+i is 79
+start server...
+start client...
+[15:08:08:587658] [T 292636] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:08:08:611579] [T 292637] [info] Listening on device rocep65s0f0, port 42523 
+[15:08:08:635469] [T 292637] [error] POLLER 0x7f0210010840 
+network init cost 171 warmup repetion 1
+[15:08:08:763839] [T 292637] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 89062
+[15:08:09:764552] [T 292637] [info] thread 0 Executed 89062 repetitions, avg 11.18643365296086 usec/iter, median 11.653 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 89062
+client exit
+359641
+i is 80
+start server...
+start client...
+[15:08:11:971178] [T 292643] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345341
+[15:08:11:995579] [T 292644] [info] Listening on device rocep65s0f0, port 37076 
+[15:08:12:019414] [T 292644] [error] POLLER 0x7f11ec010840 
+network init cost 171 warmup repetion 1
+[15:08:12:147842] [T 292644] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84948
+[15:08:13:148513] [T 292644] [info] thread 0 Executed 84948 repetitions, avg 11.729955384470498 usec/iter, median 11.702 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84948
+client exit
+359713
+i is 81
+start server...
+start client...
+[15:08:15:356142] [T 292650] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345320
+[15:08:15:387570] [T 292651] [info] Listening on device rocep65s0f0, port 55671 
+[15:08:15:411451] [T 292651] [error] POLLER 0x7f8b18010840 
+network init cost 178 warmup repetion 1
+[15:08:15:539850] [T 292651] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84882
+[15:08:16:540619] [T 292651] [info] thread 0 Executed 84882 repetitions, avg 11.738812339483047 usec/iter, median 11.693 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84882
+client exit
+359785
+i is 82
+start server...
+start client...
+[15:08:18:748349] [T 292657] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345393
+[15:08:18:775586] [T 292658] [info] Listening on device rocep65s0f0, port 55370 
+[15:08:18:799649] [T 292658] [error] POLLER 0x7f18b0010840 
+network init cost 174 warmup repetion 1
+[15:08:18:927891] [T 292658] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84107
+[15:08:19:928477] [T 292658] [info] thread 0 Executed 84107 repetitions, avg 11.847716836886347 usec/iter, median 11.752 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84107
+client exit
+359858
+i is 83
+start server...
+start client...
+[15:08:22:136702] [T 292664] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345321
+[15:08:22:163569] [T 292665] [info] Listening on device rocep65s0f0, port 47023 
+[15:08:22:187323] [T 292665] [error] POLLER 0x7fc1b0010840 
+network init cost 175 warmup repetion 1
+[15:08:22:315667] [T 292665] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84715
+[15:08:23:316371] [T 292665] [info] thread 0 Executed 84715 repetitions, avg 11.76188868559287 usec/iter, median 11.712 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84715
+client exit
+359932
+i is 84
+start server...
+start client...
+[15:08:25:524490] [T 292672] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345325
+[15:08:25:551572] [T 292673] [info] Listening on device rocep65s0f0, port 56805 
+[15:08:25:575754] [T 292673] [error] POLLER 0x7f3340010840 
+network init cost 174 warmup repetion 1
+[15:08:25:703667] [T 292673] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84727
+[15:08:26:704326] [T 292673] [info] thread 0 Executed 84727 repetitions, avg 11.760119111971392 usec/iter, median 11.712 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84727
+client exit
+360005
+i is 85
+start server...
+start client...
+[15:08:28:912232] [T 292679] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345389
+[15:08:28:939584] [T 292680] [info] Listening on device rocep65s0f0, port 36137 
+[15:08:28:963466] [T 292680] [error] POLLER 0x7f65d8010840 
+network init cost 174 warmup repetion 1
+[15:08:29:091673] [T 292680] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 94463
+[15:08:30:092158] [T 292680] [info] thread 0 Executed 94463 repetitions, avg 10.544813821284524 usec/iter, median 9.96 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 94463
+client exit
+360077
+i is 86
+start server...
+start client...
+[15:08:32:299762] [T 292686] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345389
+[15:08:32:327584] [T 292687] [info] Listening on device rocep65s0f0, port 53375 
+[15:08:32:351617] [T 292687] [error] POLLER 0x7f4b60010840 
+network init cost 175 warmup repetion 1
+[15:08:32:479654] [T 292687] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84662
+[15:08:33:480325] [T 292687] [info] thread 0 Executed 84662 repetitions, avg 11.76976879828022 usec/iter, median 11.753 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84662
+client exit
+360149
+i is 87
+start server...
+start client...
+[15:08:35:688545] [T 292693] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345321
+[15:08:35:715573] [T 292694] [info] Listening on device rocep65s0f0, port 36040 
+[15:08:35:739356] [T 292694] [error] POLLER 0x7f6534010840 
+network init cost 174 warmup repetion 1
+[15:08:35:867685] [T 292694] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84624
+[15:08:36:868340] [T 292694] [info] thread 0 Executed 84624 repetitions, avg 11.774760753450558 usec/iter, median 11.713 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84624
+client exit
+360221
+i is 88
+start server...
+start client...
+[15:08:39:077618] [T 292700] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:08:39:103598] [T 292701] [info] Listening on device rocep65s0f0, port 49790 
+[15:08:39:127502] [T 292701] [error] POLLER 0x7fb3c0010840 
+network init cost 174 warmup repetion 1
+[15:08:39:255720] [T 292701] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84848
+[15:08:40:256506] [T 292701] [info] thread 0 Executed 84848 repetitions, avg 11.743917735244201 usec/iter, median 11.703 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84848
+client exit
+360293
+i is 89
+start server...
+start client...
+[15:08:42:464770] [T 292718] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:08:42:495591] [T 292719] [info] Listening on device rocep65s0f0, port 47959 
+[15:08:42:519572] [T 292719] [error] POLLER 0x7fabc0010840 
+network init cost 178 warmup repetion 1
+[15:08:42:647670] [T 292719] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84448
+[15:08:43:648465] [T 292719] [info] thread 0 Executed 84448 repetitions, avg 11.79956672745358 usec/iter, median 11.733 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84448
+client exit
+360365
+i is 90
+start server...
+start client...
+[15:08:45:856195] [T 292725] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345384
+[15:08:45:887585] [T 292726] [info] Listening on device rocep65s0f0, port 37143 
+[15:08:45:911264] [T 292726] [error] POLLER 0x7f3e50010840 
+network init cost 178 warmup repetion 1
+[15:08:46:039873] [T 292726] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 95766
+[15:08:47:040427] [T 292726] [info] thread 0 Executed 95766 repetitions, avg 10.40081631267882 usec/iter, median 9.979 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 95766
+client exit
+360437
+i is 91
+start server...
+start client...
+[15:08:49:248626] [T 292732] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345326
+[15:08:49:275568] [T 292733] [info] Listening on device rocep65s0f0, port 50210 
+[15:08:49:299324] [T 292733] [error] POLLER 0x7fa638010840 
+network init cost 178 warmup repetion 1
+[15:08:49:431847] [T 292733] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 102349
+[15:08:50:432598] [T 292733] [info] thread 0 Executed 102349 repetitions, avg 9.7291300159259 usec/iter, median 9.659 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 102349
+client exit
+360512
+i is 92
+start server...
+start client...
+[15:08:52:639395] [T 292739] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345331
+[15:08:52:663570] [T 292740] [info] Listening on device rocep65s0f0, port 34860 
+[15:08:52:687731] [T 292740] [error] POLLER 0x7f6d94010840 
+network init cost 171 warmup repetion 1
+[15:08:52:815738] [T 292740] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 90405
+[15:08:53:816399] [T 292740] [info] thread 0 Executed 90405 repetitions, avg 11.019540678059842 usec/iter, median 11.563 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 90405
+client exit
+360584
+i is 93
+start server...
+start client...
+[15:08:56:023945] [T 292746] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345389
+[15:08:56:051573] [T 292747] [info] Listening on device rocep65s0f0, port 46833 
+[15:08:56:075567] [T 292747] [error] POLLER 0x7fea3c010840 
+network init cost 176 warmup repetion 1
+[15:08:56:203891] [T 292747] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84613
+[15:08:57:204443] [T 292747] [info] thread 0 Executed 84613 repetitions, avg 11.776583007339298 usec/iter, median 11.712 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84613
+client exit
+360656
+i is 94
+start server...
+start client...
+[15:08:59:412716] [T 292753] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:08:59:439577] [T 292754] [info] Listening on device rocep65s0f0, port 44299 
+[15:08:59:463530] [T 292754] [error] POLLER 0x7fe7ec010840 
+network init cost 174 warmup repetion 1
+[15:08:59:591770] [T 292754] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84857
+[15:09:00:592368] [T 292754] [info] thread 0 Executed 84857 repetitions, avg 11.742404633677834 usec/iter, median 11.683 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84857
+client exit
+360728
+i is 95
+start server...
+start client...
+[15:09:02:800853] [T 292760] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:09:02:827590] [T 292761] [info] Listening on device rocep65s0f0, port 44521 
+[15:09:02:851382] [T 292761] [error] POLLER 0x7efeb4010840 
+network init cost 174 warmup repetion 1
+[15:09:02:979907] [T 292761] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 83422
+[15:09:03:980388] [T 292761] [info] thread 0 Executed 83422 repetitions, avg 11.94500105487761 usec/iter, median 11.883 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 83422
+client exit
+360800
+i is 96
+start server...
+start client...
+[15:09:06:188755] [T 292767] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345336
+[15:09:06:215561] [T 292768] [info] Listening on device rocep65s0f0, port 46351 
+[15:09:06:239610] [T 292768] [error] POLLER 0x7f7b80010840 
+network init cost 174 warmup repetion 1
+[15:09:06:367875] [T 292768] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 84820
+[15:09:07:368434] [T 292768] [info] thread 0 Executed 84820 repetitions, avg 11.747402145720349 usec/iter, median 11.692 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 84820
+client exit
+360872
+i is 97
+start server...
+start client...
+[15:09:09:575900] [T 292774] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:09:09:603574] [T 292775] [info] Listening on device rocep65s0f0, port 57967 
+[15:09:09:627510] [T 292775] [error] POLLER 0x7f6464010840 
+network init cost 175 warmup repetion 1
+[15:09:09:755905] [T 292775] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 85868
+[15:09:10:756502] [T 292775] [info] thread 0 Executed 85868 repetitions, avg 11.604082754926164 usec/iter, median 11.542 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 85868
+client exit
+360945
+i is 98
+start server...
+start client...
+[15:09:12:964177] [T 292781] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345326
+[15:09:12:991570] [T 292782] [info] Listening on device rocep65s0f0, port 60006 
+[15:09:13:015572] [T 292782] [error] POLLER 0x7f7258010840 
+network init cost 174 warmup repetion 1
+[15:09:13:143931] [T 292782] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 94797
+[15:09:14:144316] [T 292782] [info] thread 0 Executed 94797 repetitions, avg 10.507436764876525 usec/iter, median 10.0 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 94797
+client exit
+361017
+i is 99
+start server...
+start client...
+[15:09:16:352037] [T 292788] [info] Executing serverless-rdma test warm_benchmarker! 
+Client Performance Log client.log
+thread 0 cpu freq 2.345388
+[15:09:16:379592] [T 292789] [info] Listening on device rocep65s0f0, port 39568 
+[15:09:16:403763] [T 292789] [error] POLLER 0x7f9288010840 
+network init cost 174 warmup repetion 1
+[15:09:16:531751] [T 292789] [info] Warmups completed, begin testing 
+test ms 1000
+Finished execution 85858
+[15:09:17:532362] [T 292789] [info] thread 0 Executed 85858 repetitions, avg 11.605500326119873 usec/iter, median 11.652 
+Thread 0 Data: 0 0 0 0 
+type 1 rps is 85858
+client exit
+361089
