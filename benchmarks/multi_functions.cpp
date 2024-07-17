@@ -97,15 +97,22 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
   double freq_ghz = measure_rdtsc_freq();
   printf("thread %zu cpu freq %f\n", thread_id, freq_ghz);
 
+  struct timespec start_t, end_t;
+  clock_gettime(CLOCK_MONOTONIC, &start_t);
+  rdmalib::Benchmarker<5> benchmarker2{settings.benchmark.repetitions};
   rfaas::executor executor("10.10.1.1", 10000, settings.benchmark.numcores, settings.benchmark.memory, thread_id + 1, *settings.device);
  
   //the last parameter is skip_exec_manager, not skip_resource_manager
   //This function will accept executor connection and then send function code data to executor 
   if (!executor.allocate(opts.flibs[thread_id], opts.input_size, opts.output_size,
-                         settings.benchmark.hot_timeout, settings.benchmark.numcores, opts.share_cores ? 0: thread_id, false)) {
+                         settings.benchmark.hot_timeout, settings.benchmark.numcores, opts.share_cores ? 0: thread_id, false, &benchmarker2)) {
     spdlog::error("Connection to executor and allocation failed!");
     return;
   }
+  
+  clock_gettime(CLOCK_MONOTONIC, &end_t);
+  int64_t cost_ms = (end_t.tv_sec - start_t.tv_sec) * 1000 + (end_t.tv_nsec - start_t.tv_nsec) / 1000000;
+  printf("network init cost %ld warmup repetion %d\n", cost_ms, settings.benchmark.warmup_repetitions);
 
   // FIXME: move me to a memory allocator
   rdmalib::Buffer<char> in(opts.input_size,
@@ -120,10 +127,11 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
   }
 
   rdmalib::Benchmarker<1> benchmarker{settings.benchmark.repetitions};
-  spdlog::info("Warmups begin");
+  //spdlog::info("Warmups begin");
   for (int i = 0; i < settings.benchmark.warmup_repetitions; ++i) {
     SPDLOG_DEBUG("Submit warm {}", i);
     executor.execute(opts.fnames[thread_id], in, out);
+    benchmarker2.end(4);
   }
   spdlog::info("Warmups completed, begin testing");
 
@@ -181,6 +189,12 @@ void client_func(size_t thread_id, rfaas::benchmark::Settings &settings, multi_f
   for (int i = 0; i < std::min(100, opts.output_size); ++i)
     printf("%d ", ((char *)out.data())[i]);
   printf("\n");
+
+  benchmarker2.export_csv(
+      "cost.txt",
+      {"connect", "submit", "spawn_connect", "initialize", "execute"}
+  );
+
 }
 
 void bind_to_core(std::thread &thread, size_t core_index) {
