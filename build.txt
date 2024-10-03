@@ -1,0 +1,3 @@
+./install_cmake.sh
+./install_deps.sh
+./build.sh
