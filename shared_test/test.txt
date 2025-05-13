@@ -1,4 +1,6 @@
 1.closeloop_exp_warm_multi_func_wrapper.sh vs closeloop_exp_multi_func_wrapper.sh: motivition test to show rfaas has longer latency then sledge. This test uses fib(1) and fib(32) to test
 2. measure_throughput.sh to measure throughput scaling with cores for rfaas and sledge
-3. measure_function_density_with_32types.sh to measure function density that less than 64 types. Sledge uses measure_function_density.sh to measure function density that beyond 32 types with openloop.
+3. measure_function_density_with_32types.sh to measure function density that less than 64 types. Sledge uses measure_function_density.sh to measure function density.
+   For middleware Sledge, comment worker preallocate sandbox in worker_thread.c and not use sandbox lifecycle management.
+   Make sure the worker is pinned to the same core in rFaaS, middleware Sledge and EdgeScale. The default test setup pin the worker thread to core 4
 

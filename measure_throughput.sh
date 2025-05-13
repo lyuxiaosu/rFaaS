@@ -13,10 +13,10 @@ if [ $# != 0 ] ; then
 fi
 
 chmod 400 ./id_rsa
-remote_ip="128.110.219.9"
+remote_ip="128.110.218.253"
 
-#worker_count=(1 3 6 9 12 15)
-worker_count=(19)
+worker_count=(1 3 6 9 12 15 18 21 24)
+#worker_count=(19)
 
 path="/my_mount/rFaaS"
 for(( i=0;i<${#worker_count[@]};i++ )) do  

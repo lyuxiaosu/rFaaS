@@ -24,7 +24,7 @@
 #include <sched.h>
 
 extern volatile sig_atomic_t term_process;
-#define PIN_THREADS_START_INDEX 3
+#define PIN_THREADS_START_INDEX 4 
 namespace server {
 
   Accounting::timepoint_t Thread::work(int invoc_id, int func_id, bool solicited, uint32_t in_size)

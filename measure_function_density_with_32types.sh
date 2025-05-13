@@ -11,10 +11,10 @@ fi
 
 rps=40000
 chmod 400 ./id_rsa
-remote_ip="128.110.219.9"
+remote_ip="128.110.218.253"
 
-#concurrency=(1 10 20 24 28 30 32 40 50 60 64)
-concurrency=(40 50 60 64)
+concurrency=(1 10 20 24 28 30 32 40 50 60 64)
+#concurrency=(64)
 
 path="/my_mount/rFaaS"
 for(( i=0;i<${#concurrency[@]};i++ )) do
@@ -28,6 +28,11 @@ for(( i=0;i<${#concurrency[@]};i++ )) do
 	echo "start rfaas server for concurrency ${concurrency[i]} testing..."
         ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip "cd $path && ./start_server.sh > /dev/null 2>&1 &" &
 	sleep 4
+        #mem_log="${concurrency[i]}_mem.log"
+        perf_log="${concurrency[i]}_perf.log"
+	
+	#ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip "$path/run_perf.sh ${concurrency[i]} > /dev/null 2>&1 &"
+	ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip "$path/run_perf.sh $perf_log > /dev/null 2>&1 &"
         #echo "start cpu monitoring"
 	#ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip "$path/start_monitor.sh $cpu_log > /dev/null 2>&1 &" 
 	echo "start client..."
@@ -40,8 +45,13 @@ for(( i=0;i<${#concurrency[@]};i++ )) do
 	fi
 	#ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip  "$path/stop_monitor.sh"
         ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip  "cd $path && sudo ./kill_rfaas.sh"
+        ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip  "cd $path && sudo ./kill_perf.sh"
         sleep 4 
 done
-folder_name="results"
+
+folder_name="rFaaS"
+ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip  "mkdir $path/$folder_name"
+ssh -o stricthostkeychecking=no -i ./id_rsa xiaosuGW@$remote_ip  "mv *_perf* $path/$folder_name"
+
 mkdir $folder_name
 mv ./client-*.log $folder_name

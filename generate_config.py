@@ -50,7 +50,7 @@ def generate_config(func_name, type1_con, type2_con, type1_rps, type2_rps, type1
         req_type2 = [type2] * type2_con
         config.append("--req-type " + ",".join(req_type1) + "," + ",".join(req_type2))
     config.append("--executors-database executors_database.json")
-    config.append("--test-ms 10000")
+    config.append("--test-ms 20000")
     config.append("--input-size {}".format(input_size))
     config.append("--output-size 4")
     config.append(f"--output-stats client.log")
